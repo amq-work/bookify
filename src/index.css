@@ -57,6 +57,72 @@ h1, h2, h3, h4, h5, h6 {
   background-image: radial-gradient(circle at 0 100%, transparent 15.5px, var(--main-page-bg) 16px);
 }
 
+/* ── Auth Screen: Active Tab Inward-Curve (mirrors sidebar) ─────────── */
+:root {
+  --auth-left-bg: #1e3b5e;
+  --auth-right-bg-light: #f8fafc;
+  --auth-right-bg-dark: #111c35;
+}
+
+/* Light mode right panel colour */
+.auth-tab-active-light {
+  position: relative;
+  background-color: var(--auth-right-bg-light);
+  border-radius: 0 20px 20px 0;
+  z-index: 10;
+}
+.auth-tab-active-light::before,
+.auth-tab-active-light::after {
+  content: '';
+  position: absolute;
+  left: 100%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+/* Dark mode right panel colour */
+.auth-tab-active-dark {
+  position: relative;
+  background-color: var(--auth-right-bg-dark);
+  border-radius: 0 20px 20px 0;
+  z-index: 10;
+}
+
+/* Inward-curve cutout: uses the same radial-gradient trick as sidebar-nav-active,
+   but on the RIGHT edge of the left side panel, touching the right form panel. */
+.auth-nav-active {
+  position: relative;
+  border-radius: 0 20px 20px 0;
+  z-index: 10;
+  transition: background-color 0.3s ease;
+}
+.auth-nav-active::before,
+.auth-nav-active::after {
+  content: '';
+  position: absolute;
+  left: 100%;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  z-index: 20;
+}
+.auth-nav-active-light::before {
+  top: -20px;
+  background-image: radial-gradient(circle at 100% 100%, transparent 19.5px, var(--auth-right-bg-light) 20px);
+}
+.auth-nav-active-light::after {
+  bottom: -20px;
+  background-image: radial-gradient(circle at 100% 0%, transparent 19.5px, var(--auth-right-bg-light) 20px);
+}
+.auth-nav-active-dark::before {
+  top: -20px;
+  background-image: radial-gradient(circle at 100% 100%, transparent 19.5px, var(--auth-right-bg-dark) 20px);
+}
+.auth-nav-active-dark::after {
+  bottom: -20px;
+  background-image: radial-gradient(circle at 100% 0%, transparent 19.5px, var(--auth-right-bg-dark) 20px);
+}
+
 /* ── Glassmorphism Utils ───────────────────────── */
 .glass-panel {
   background: rgba(255, 255, 255, 0.45);
