@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Lock,
   Mail,
-  User,
-  Building2,
   Eye,
   EyeOff,
   CheckCircle2,
@@ -12,7 +10,6 @@ import {
   ShieldCheck,
   Sun,
   Moon,
-  ArrowRight,
 } from 'lucide-react';
 
 interface AuthScreenProps {
@@ -124,8 +121,11 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
     : 'bg-white border-slate-200 focus-within:border-[#274c77] shadow-xs focus-within:shadow-sm';
   const inputText  = isDark ? 'text-white placeholder:text-slate-500' : 'text-[#274c77] placeholder:text-slate-400';
 
-  // Active-tab CSS classes  (defined in index.css)
-  const tabActiveCls = `auth-tab-active ${isDark ? 'auth-tab-active-dark' : 'auth-tab-active-light'}`;
+  // Active-tab CSS class helper
+  const tabActiveCls = (active: boolean) =>
+    active
+      ? `auth-tab-active ${isDark ? 'auth-tab-active-dark' : 'auth-tab-active-light'}`
+      : '';
 
   return (
     <div
@@ -179,49 +179,26 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
 
         {/* ════════════════════════════════════════════
             TAB NAV  —  sidebar-style merged cutout
-            Each button is FULL-WIDTH (no right padding)
-            so its right edge sits exactly at the panel
-            boundary, letting the ::before/::after curves
-            appear correctly against the panel gradient.
+            Buttons hug their content width and are
+            right-aligned (right edge = panel boundary)
+            so ::before/::after concave curves work.
+            No icons, no arrows — pure text only.
             ════════════════════════════════════════════ */}
-        <div className="relative z-10 flex flex-col gap-1 mb-20 pr-0">
+        <div className="relative z-10 flex flex-col items-end gap-2 mb-20">
+
           {/* ── Sign In Tab ── */}
           <button
             type="button"
             onClick={() => switchMode('login')}
             className={[
-              'relative flex items-center gap-3 w-full pl-10 pr-6 py-5 cursor-pointer',
-              'transition-all duration-300 ease-in-out group',
+              'relative cursor-pointer transition-all duration-300 ease-in-out',
               mode === 'login'
-                ? `${tabActiveCls} ${textMain}`
-                : 'text-white/55 hover:text-white/90',
+                ? `${tabActiveCls(true)} px-9 py-4 text-sm font-semibold tracking-wide ${textMain}`
+                : 'px-9 py-4 text-sm font-medium text-white/55 hover:text-white/85',
             ].join(' ')}
             style={mode === 'login' ? { backgroundColor: rpBg } : {}}
           >
-            {/* Icon pill */}
-            <div
-              className={[
-                'w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300',
-                mode === 'login'
-                  ? 'bg-[#274c77] text-white shadow-lg shadow-[#274c77]/30'
-                  : 'bg-white/10 text-white/55 group-hover:bg-white/20',
-              ].join(' ')}
-            >
-              <User className="w-4 h-4" />
-            </div>
-
-            <div className="text-left">
-              <span className={`text-sm font-semibold block tracking-wide ${mode === 'login' ? textMain : 'text-white/70 group-hover:text-white/90'}`}>
-                Sign In
-              </span>
-              <span className={`text-[10px] ${mode === 'login' ? textSub : 'text-white/35'}`}>
-                Access your dashboard
-              </span>
-            </div>
-
-            {mode === 'login' && (
-              <ArrowRight className={`w-4 h-4 ml-auto ${isDark ? 'text-slate-500' : 'text-[#6096ba]'}`} />
-            )}
+            Sign In
           </button>
 
           {/* ── Create Account Tab ── */}
@@ -229,38 +206,16 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
             type="button"
             onClick={() => switchMode('signup')}
             className={[
-              'relative flex items-center gap-3 w-full pl-10 pr-6 py-5 cursor-pointer',
-              'transition-all duration-300 ease-in-out group',
+              'relative cursor-pointer transition-all duration-300 ease-in-out',
               mode === 'signup'
-                ? `${tabActiveCls} ${textMain}`
-                : 'text-white/55 hover:text-white/90',
+                ? `${tabActiveCls(true)} px-9 py-4 text-sm font-semibold tracking-wide ${textMain}`
+                : 'px-9 py-4 text-sm font-medium text-white/55 hover:text-white/85',
             ].join(' ')}
             style={mode === 'signup' ? { backgroundColor: rpBg } : {}}
           >
-            <div
-              className={[
-                'w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300',
-                mode === 'signup'
-                  ? 'bg-[#274c77] text-white shadow-lg shadow-[#274c77]/30'
-                  : 'bg-white/10 text-white/55 group-hover:bg-white/20',
-              ].join(' ')}
-            >
-              <Building2 className="w-4 h-4" />
-            </div>
-
-            <div className="text-left">
-              <span className={`text-sm font-semibold block tracking-wide ${mode === 'signup' ? textMain : 'text-white/70 group-hover:text-white/90'}`}>
-                Create Account
-              </span>
-              <span className={`text-[10px] ${mode === 'signup' ? textSub : 'text-white/35'}`}>
-                Start your free workspace
-              </span>
-            </div>
-
-            {mode === 'signup' && (
-              <ArrowRight className={`w-4 h-4 ml-auto ${isDark ? 'text-slate-500' : 'text-[#6096ba]'}`} />
-            )}
+            Create Account
           </button>
+
         </div>
 
         {/* Footer */}
