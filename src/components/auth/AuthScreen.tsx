@@ -10,12 +10,10 @@ import {
   CheckCircle2,
   AlertCircle,
   Key,
-  ArrowRight,
   ShieldCheck,
   Sun,
   Moon,
 } from 'lucide-react';
-import { Button } from '../ui';
 
 interface AuthScreenProps {
   initialMode?: 'login' | 'signup';
@@ -97,8 +95,8 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
         if (onSuccess) {
           onSuccess({ email: loginEmail, name: 'Aayan Qureshi' });
         }
-      }, 900);
-    }, 1100);
+      }, 800);
+    }, 1000);
   };
 
   const handleSignupSubmit = (e: React.FormEvent) => {
@@ -134,39 +132,31 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
             businessName: signupBusinessName,
           });
         }
-      }, 1000);
-    }, 1200);
+      }, 900);
+    }, 1100);
   };
 
   const isDark = theme === 'dark';
 
   return (
     <div
-      className={`min-h-screen w-full flex flex-col justify-between p-4 sm:p-6 transition-colors duration-300 relative overflow-hidden ${
+      className={`min-h-screen w-full flex flex-col justify-between p-4 sm:p-6 transition-colors duration-300 relative overflow-hidden font-sans ${
         isDark
           ? 'bg-[#0b1329] text-slate-100'
-          : 'bg-gradient-to-br from-[#e7ecef] via-[#a3cef1]/40 to-[#e7ecef] text-[#274c77]'
+          : 'bg-gradient-to-br from-[#1e3b5e] via-[#274c77] to-[#14263e] text-[#274c77]'
       }`}
     >
-      {/* Decorative Floating Glowing Orbs */}
-      <div
-        className={`absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl pointer-events-none animate-pulse ${
-          isDark ? 'bg-blue-600/15' : 'bg-[#274c77]/15'
-        }`}
-      />
-      <div
-        className={`absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-3xl pointer-events-none animate-pulse ${
-          isDark ? 'bg-indigo-500/15' : 'bg-[#6096ba]/25'
-        }`}
-      />
+      {/* Background Decorative Ambient Glows */}
+      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#6096ba]/20 rounded-full blur-3xl pointer-events-none animate-pulse" />
+      <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[#274c77]/30 rounded-full blur-3xl pointer-events-none animate-pulse" />
 
-      {/* Top Header Bar for Standalone Page */}
-      <header className="w-full max-w-6xl mx-auto flex items-center justify-between py-2 z-10">
+      {/* Top Header Bar */}
+      <header className="w-full max-w-6xl mx-auto flex items-center justify-between py-2 z-20">
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-[#274c77] text-white flex items-center justify-center shadow-md border border-white/20">
+          <div className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-md text-white flex items-center justify-center shadow-md border border-white/30">
             <Sparkles className="w-5 h-5 text-[#a3cef1]" />
           </div>
-          <span className={`text-xl font-bold tracking-tight font-heading ${isDark ? 'text-white' : 'text-[#274c77]'}`}>
+          <span className="text-xl font-bold tracking-tight font-heading text-white">
             Bookify
           </span>
         </div>
@@ -178,8 +168,8 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
             onClick={onToggleTheme}
             className={`p-2 rounded-2xl transition-all cursor-pointer border flex items-center gap-2 text-xs font-semibold shadow-xs ${
               isDark
-                ? 'bg-slate-800/80 text-amber-400 border-slate-700 hover:bg-slate-700'
-                : 'bg-white/80 text-[#274c77] border-white/80 hover:bg-white'
+                ? 'bg-slate-800/90 text-amber-400 border-slate-700 hover:bg-slate-700'
+                : 'bg-white/20 text-white border-white/30 hover:bg-white/30 backdrop-blur-md'
             }`}
             title={isDark ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
           >
@@ -190,503 +180,404 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
               </>
             ) : (
               <>
-                <Moon className="w-4 h-4 text-[#274c77]" />
-                <span className="hidden xs:inline text-[#274c77]">Dark Mode</span>
+                <Moon className="w-4 h-4 text-white" />
+                <span className="hidden xs:inline text-white">Dark Mode</span>
               </>
             )}
           </button>
         )}
       </header>
 
-      {/* Main Glass Panel */}
-      <main className="w-full max-w-md mx-auto my-auto z-10">
+      {/* MAIN CARD CONTAINER (Reference Image Geometry & Layout) */}
+      <main className="w-full max-w-4xl mx-auto my-auto z-10 p-2 sm:p-0">
         <div
-          className={`w-full rounded-3xl shadow-2xl overflow-hidden border transition-all duration-300 ${
+          className={`w-full rounded-3xl shadow-2xl overflow-hidden border grid grid-cols-1 md:grid-cols-12 min-h-[520px] transition-all duration-300 ${
             isDark
-              ? 'bg-[#131f3a]/80 backdrop-blur-2xl border-slate-700/80 shadow-slate-950/50'
-              : 'bg-white/70 backdrop-blur-2xl border-white/90 shadow-xl'
+              ? 'bg-[#111c35] border-slate-800 shadow-slate-950/80'
+              : 'bg-white border-white/60 shadow-2xl'
           }`}
         >
-          {/* Top Header / Branding */}
-          <div className="px-6 pt-8 pb-4 text-center">
-            <div className="w-12 h-12 mx-auto rounded-2xl bg-[#274c77] text-white flex items-center justify-center shadow-lg shadow-[#274c77]/30 mb-3 border border-white/40">
-              <Sparkles className="w-6 h-6 text-[#a3cef1]" />
+          {/* ================= LEFT SIDE PANEL (GEOMETRIC SHAPES & TAB PILL CUTOUT) ================= */}
+          <div className="md:col-span-5 relative bg-gradient-to-br from-[#274c77] via-[#1e3b5e] to-[#14263e] p-8 flex flex-col justify-between overflow-hidden min-h-[220px] md:min-h-full select-none">
+            {/* Layered Geometric Shapes (Reference Image Diagonal Pattern) */}
+            <div className="absolute inset-0 pointer-events-none opacity-40">
+              <div className="absolute -top-16 -left-16 w-80 h-80 bg-[#6096ba]/30 rotate-45 transform origin-bottom-right rounded-3xl" />
+              <div className="absolute top-24 -left-20 w-72 h-72 bg-[#a3cef1]/20 -rotate-12 transform rounded-3xl" />
+              <div className="absolute bottom-0 right-0 w-64 h-64 bg-[#274c77]/40 rotate-12 transform rounded-3xl" />
             </div>
-            <h2 className={`text-2xl font-black tracking-tight font-heading ${isDark ? 'text-white' : 'text-[#274c77]'}`}>
-              Welcome to Bookify
-            </h2>
-            <p className={`text-xs font-medium mt-1 ${isDark ? 'text-slate-400' : 'text-[#6096ba]'}`}>
-              Multi-Tenant SaaS Scheduling & Booking Platform
-            </p>
 
-            {/* Mode Switcher Tabs */}
-            <div
-              className={`mt-6 flex p-1.5 rounded-2xl border shadow-inner ${
-                isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white/40 border-white/60'
-              }`}
-            >
-              <button
-                type="button"
-                onClick={() => {
-                  setMode('login');
-                  setLoginError('');
-                  setAuthSuccessMessage(null);
-                }}
-                className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-                  mode === 'login'
-                    ? 'bg-[#274c77] text-white shadow-md'
-                    : isDark
-                    ? 'text-slate-400 hover:text-white'
-                    : 'text-[#274c77] hover:bg-white/40'
-                }`}
-              >
-                Sign In
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setMode('signup');
-                  setAuthSuccessMessage(null);
-                }}
-                className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-                  mode === 'signup'
-                    ? 'bg-[#274c77] text-white shadow-md'
-                    : isDark
-                    ? 'text-slate-400 hover:text-white'
-                    : 'text-[#274c77] hover:bg-white/40'
-                }`}
-              >
-                Create Account
-              </button>
+            {/* Left Top Brand Section */}
+            <div className="relative z-10 space-y-2">
+              <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md text-white flex items-center justify-center border border-white/20 shadow-md">
+                <Sparkles className="w-6 h-6 text-[#a3cef1]" />
+              </div>
+              <h2 className="text-2xl font-black text-white tracking-tight font-heading">
+                Bookify SaaS
+              </h2>
+              <p className="text-xs text-[#a3cef1] font-medium leading-relaxed max-w-xs">
+                Smart multi-tenant scheduling & booking platform.
+              </p>
+            </div>
+
+            {/* OVERLAPPING TAB CONTROLS (Reference Image Style) */}
+            <div className="relative z-20 my-6 md:my-auto space-y-4 text-center md:text-left">
+              {mode === 'login' ? (
+                <div className="flex flex-col items-center md:items-start gap-4">
+                  {/* Active LOGIN Pill Tab extending to right */}
+                  <div className="relative inline-flex items-center">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMode('login');
+                        setLoginError('');
+                      }}
+                      className="px-8 py-3 bg-white text-[#274c77] font-black text-xs uppercase tracking-widest rounded-full md:rounded-r-full md:rounded-l-full shadow-lg hover:shadow-xl transition-all cursor-pointer transform hover:scale-105"
+                    >
+                      LOGIN
+                    </button>
+                  </div>
+                  {/* Inactive SIGN IN / REGISTER text */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMode('signup');
+                      setAuthSuccessMessage(null);
+                    }}
+                    className="text-xs font-bold text-white/70 hover:text-white uppercase tracking-wider transition-colors cursor-pointer pl-3"
+                  >
+                    SIGN UP
+                  </button>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center md:items-start gap-4">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMode('login');
+                      setLoginError('');
+                    }}
+                    className="text-xs font-bold text-white/70 hover:text-white uppercase tracking-wider transition-colors cursor-pointer pl-3"
+                  >
+                    LOGIN
+                  </button>
+                  {/* Active SIGN UP Pill Tab */}
+                  <div className="relative inline-flex items-center">
+                    <button
+                      type="button"
+                      onClick={() => setMode('signup')}
+                      className="px-8 py-3 bg-white text-[#274c77] font-black text-xs uppercase tracking-widest rounded-full shadow-lg hover:shadow-xl transition-all cursor-pointer transform hover:scale-105"
+                    >
+                      SIGN UP
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Left Bottom Footer */}
+            <div className="relative z-10 text-[10px] text-[#a3cef1]/80 font-medium hidden md:block">
+              Fast • Reliable • Branded Booking Engine
             </div>
           </div>
 
-          {/* Form Body */}
-          <div className="px-6 pb-8 pt-2">
-            {authSuccessMessage ? (
-              <div className="py-8 text-center space-y-3 animate-in zoom-in-95 duration-300">
-                <div className="w-16 h-16 mx-auto rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center border border-emerald-500/40 shadow-inner">
-                  <CheckCircle2 className="w-9 h-9" />
+          {/* ================= RIGHT SIDE FORM CONTAINER (Reference Image Design) ================= */}
+          <div
+            className={`md:col-span-7 p-6 sm:p-10 flex flex-col justify-between ${
+              isDark ? 'bg-[#111c35] text-slate-100' : 'bg-white text-[#274c77]'
+            }`}
+          >
+            <div>
+              {/* TOP CIRCLE AVATAR ICON (Reference Image Style) */}
+              <div className="text-center space-y-2 mb-6">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-full bg-gradient-to-tr from-[#274c77] via-[#1e3b5e] to-[#6096ba] text-white flex items-center justify-center shadow-xl border-4 border-white/30 dark:border-slate-800 transform hover:scale-105 transition-transform">
+                  <User className="w-8 h-8 sm:w-10 sm:h-10 text-[#a3cef1]" />
                 </div>
-                <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-[#274c77]'}`}>
-                  {authSuccessMessage}
-                </h3>
-                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-[#6096ba]'}`}>
-                  Launching SaaS Dashboard...
-                </p>
-              </div>
-            ) : mode === 'login' ? (
-              /* --- LOGIN FORM --- */
-              <form onSubmit={handleLoginSubmit} className="space-y-4">
-                {/* Test Credentials Note Box */}
-                <div
-                  className={`p-3.5 border rounded-2xl space-y-2 backdrop-blur-md shadow-xs ${
-                    isDark
-                      ? 'bg-slate-900/80 border-slate-700/80 text-slate-200'
-                      : 'bg-gradient-to-r from-blue-50/80 to-indigo-50/80 border-blue-200/80 text-slate-700'
+                <h3
+                  className={`text-xl font-black uppercase tracking-widest font-heading ${
+                    isDark ? 'text-white' : 'text-[#274c77]'
                   }`}
                 >
-                  <div className="flex items-center justify-between">
-                    <div className={`flex items-center gap-1.5 text-xs font-bold ${isDark ? 'text-slate-200' : 'text-[#274c77]'}`}>
-                      <Key className="w-4 h-4 text-amber-500" />
-                      <span>Demo Test Credentials:</span>
+                  {mode === 'login' ? 'LOGIN' : 'SIGN UP'}
+                </h3>
+              </div>
+
+              {authSuccessMessage ? (
+                <div className="py-12 text-center space-y-3 animate-in zoom-in-95 duration-300">
+                  <div className="w-16 h-16 mx-auto rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center border border-emerald-500/40 shadow-inner">
+                    <CheckCircle2 className="w-9 h-9" />
+                  </div>
+                  <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-[#274c77]'}`}>
+                    {authSuccessMessage}
+                  </h3>
+                  <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-[#6096ba]'}`}>
+                    Opening SaaS Dashboard...
+                  </p>
+                </div>
+              ) : mode === 'login' ? (
+                /* --- LOGIN FORM (Underlined Minimalist Style) --- */
+                <form onSubmit={handleLoginSubmit} className="space-y-6">
+                  {/* Test Credentials Box */}
+                  <div
+                    className={`p-3 rounded-2xl border flex items-center justify-between text-xs backdrop-blur-md ${
+                      isDark
+                        ? 'bg-slate-900/80 border-slate-800 text-slate-300'
+                        : 'bg-blue-50/80 border-blue-100 text-slate-700'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Key className="w-4 h-4 text-amber-500 shrink-0" />
+                      <div className="text-[11px] font-mono">
+                        <span className="font-semibold">aqureshi.1020@gmail.com</span> / password123
+                      </div>
                     </div>
                     <button
                       type="button"
                       onClick={handleFillDemoCredentials}
-                      className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border transition-colors shadow-2xs cursor-pointer ${
-                        isDark
-                          ? 'bg-blue-600/30 hover:bg-blue-600/50 text-blue-300 border-blue-500/40'
-                          : 'bg-white/80 hover:bg-white text-blue-700 border-blue-200'
-                      }`}
+                      className="text-[10px] font-bold text-blue-700 dark:text-blue-400 bg-white dark:bg-slate-800 hover:opacity-90 px-2 py-1 rounded-lg border border-blue-200 dark:border-slate-700 shadow-2xs cursor-pointer shrink-0"
                     >
-                      1-Click Auto-fill
+                      Fill Demo
                     </button>
                   </div>
-                  <div className="text-[11px] font-mono space-y-0.5 pl-5">
-                    <div>
-                      <span className={isDark ? 'text-slate-400' : 'text-slate-500'}>Email:</span>{' '}
-                      <span className={`font-semibold ${isDark ? 'text-white' : 'text-slate-800'}`}>
-                        aqureshi.1020@gmail.com
-                      </span>
+
+                  {loginError && (
+                    <div className="p-3 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs font-semibold flex items-center gap-2">
+                      <AlertCircle className="w-4 h-4 shrink-0" />
+                      <span>{loginError}</span>
                     </div>
-                    <div>
-                      <span className={isDark ? 'text-slate-400' : 'text-slate-500'}>Password:</span>{' '}
-                      <span className={`font-semibold ${isDark ? 'text-white' : 'text-slate-800'}`}>
-                        password123
-                      </span>
+                  )}
+
+                  {/* Underlined Email Field */}
+                  <div className="space-y-1">
+                    <div className="relative border-b border-slate-300 dark:border-slate-700 focus-within:border-[#274c77] dark:focus-within:border-[#6096ba] transition-colors py-1">
+                      <User className={`w-5 h-5 absolute left-0 top-2.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`} />
+                      <input
+                        type="email"
+                        value={loginEmail}
+                        onChange={(e) => setLoginEmail(e.target.value)}
+                        placeholder="Email"
+                        className={`w-full pl-8 pr-4 py-2 bg-transparent text-xs sm:text-sm font-medium focus:outline-none placeholder:text-slate-400 ${
+                          isDark ? 'text-white' : 'text-[#274c77]'
+                        }`}
+                      />
                     </div>
                   </div>
-                </div>
 
-                {loginError && (
-                  <div className="p-3 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs font-semibold flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4 shrink-0" />
-                    <span>{loginError}</span>
+                  {/* Underlined Password Field */}
+                  <div className="space-y-1">
+                    <div className="relative border-b border-slate-300 dark:border-slate-700 focus-within:border-[#274c77] dark:focus-within:border-[#6096ba] transition-colors py-1">
+                      <Lock className={`w-5 h-5 absolute left-0 top-2.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`} />
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        value={loginPassword}
+                        onChange={(e) => setLoginPassword(e.target.value)}
+                        placeholder="Password"
+                        className={`w-full pl-8 pr-10 py-2 bg-transparent text-xs sm:text-sm font-medium focus:outline-none placeholder:text-slate-400 ${
+                          isDark ? 'text-white' : 'text-[#274c77]'
+                        }`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className={`absolute right-1 top-2.5 ${
+                          isDark ? 'text-slate-400 hover:text-white' : 'text-slate-400 hover:text-slate-600'
+                        }`}
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
                   </div>
-                )}
 
-                {/* Email Input */}
-                <div className="space-y-1">
-                  <label className={`block text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-[#274c77]'}`}>
-                    Email Address
-                  </label>
-                  <div className="relative">
-                    <Mail className={`w-4 h-4 absolute left-3.5 top-3 ${isDark ? 'text-slate-400' : 'text-[#6096ba]'}`} />
-                    <input
-                      type="email"
-                      value={loginEmail}
-                      onChange={(e) => setLoginEmail(e.target.value)}
-                      placeholder="aqureshi.1020@gmail.com"
-                      className={`w-full pl-10 pr-4 py-2.5 border rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 transition-all ${
-                        isDark
-                          ? 'bg-slate-900/60 border-slate-700 text-white placeholder:text-slate-500 focus:ring-blue-500/40 focus:border-blue-400'
-                          : 'bg-white/70 border-white/80 text-[#274c77] placeholder:text-slate-400 focus:ring-[#6096ba]/40 focus:border-[#274c77]'
-                      }`}
-                    />
-                  </div>
-                </div>
-
-                {/* Password Input */}
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <label className={`block text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-[#274c77]'}`}>
-                      Password
-                    </label>
+                  {/* Action Row: Forgot Password & Pill Submit Button (Reference Image) */}
+                  <div className="flex items-center justify-between pt-2">
                     <a
                       href="#forgot"
                       onClick={(e) => {
                         e.preventDefault();
-                        alert('Password reset link sent to demo account!');
+                        alert('Password reset link sent to demo email!');
                       }}
-                      className={`text-[11px] font-semibold transition-colors ${isDark ? 'text-blue-400 hover:text-blue-300' : 'text-[#6096ba] hover:text-[#274c77]'}`}
+                      className="text-xs font-semibold text-[#6096ba] hover:underline"
                     >
                       Forgot Password?
                     </a>
-                  </div>
-                  <div className="relative">
-                    <Lock className={`w-4 h-4 absolute left-3.5 top-3 ${isDark ? 'text-slate-400' : 'text-[#6096ba]'}`} />
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      value={loginPassword}
-                      onChange={(e) => setLoginPassword(e.target.value)}
-                      placeholder="••••••••"
-                      className={`w-full pl-10 pr-10 py-2.5 border rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 transition-all ${
-                        isDark
-                          ? 'bg-slate-900/60 border-slate-700 text-white placeholder:text-slate-500 focus:ring-blue-500/40 focus:border-blue-400'
-                          : 'bg-white/70 border-white/80 text-[#274c77] placeholder:text-slate-400 focus:ring-[#6096ba]/40 focus:border-[#274c77]'
-                      }`}
-                    />
+
                     <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className={`absolute right-3.5 top-3 ${isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-400 hover:text-slate-600'}`}
+                      type="submit"
+                      disabled={isLoading}
+                      className="px-8 py-2.5 bg-[#274c77] hover:bg-[#1e3b5e] text-white font-black text-xs uppercase tracking-widest rounded-full shadow-lg hover:shadow-xl transition-all cursor-pointer transform hover:scale-105 disabled:opacity-50"
                     >
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      {isLoading ? 'LOGIN...' : 'LOGIN'}
                     </button>
                   </div>
-                </div>
-
-                {/* Remember Me Checkbox */}
-                <div className="flex items-center gap-2 pt-1">
-                  <input
-                    type="checkbox"
-                    id="rememberMe"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    className="w-4 h-4 rounded text-[#274c77] focus:ring-[#6096ba] border-slate-600 cursor-pointer"
-                  />
-                  <label htmlFor="rememberMe" className={`text-xs font-medium cursor-pointer ${isDark ? 'text-slate-300' : 'text-[#274c77]'}`}>
-                    Keep me signed in for 30 days
-                  </label>
-                </div>
-
-                {/* Submit Button */}
-                <Button
-                  type="submit"
-                  variant="primary"
-                  isLoading={isLoading}
-                  className="w-full py-3 bg-[#274c77] hover:bg-[#1d3859] text-white rounded-xl font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer mt-2"
-                >
-                  <span>Sign In to Dashboard</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
-              </form>
-            ) : (
-              /* --- SIGNUP FORM WITH REALTIME INPUT VALIDATION --- */
-              <form onSubmit={handleSignupSubmit} className="space-y-3.5">
-                {/* Full Name Input */}
-                <div className="space-y-1">
-                  <label className={`block text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-[#274c77]'}`}>
-                    Full Name <span className="text-rose-500">*</span>
-                  </label>
-                  <div className="relative">
-                    <User className={`w-4 h-4 absolute left-3.5 top-3 ${isDark ? 'text-slate-400' : 'text-[#6096ba]'}`} />
+                </form>
+              ) : (
+                /* --- SIGNUP FORM (Underlined Minimalist Style with Validation) --- */
+                <form onSubmit={handleSignupSubmit} className="space-y-4">
+                  {/* Underlined Full Name Field */}
+                  <div className="relative border-b border-slate-300 dark:border-slate-700 focus-within:border-[#274c77] transition-colors py-1">
+                    <User className={`w-4 h-4 absolute left-0 top-3 ${isDark ? 'text-slate-400' : 'text-slate-500'}`} />
                     <input
                       type="text"
                       value={signupName}
                       onBlur={() => setSignupTouched((prev) => ({ ...prev, name: true }))}
                       onChange={(e) => setSignupName(e.target.value)}
-                      placeholder="e.g. Aayan Qureshi"
-                      className={`w-full pl-10 pr-9 py-2.5 border rounded-xl text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 ${
-                        isDark
-                          ? 'bg-slate-900/60 border-slate-700 text-white placeholder:text-slate-500'
-                          : 'bg-white/70 border-white/80 text-[#274c77] placeholder:text-slate-400'
-                      } ${
-                        signupTouched.name && !isNameValid
-                          ? 'border-rose-400 focus:ring-rose-300'
-                          : signupName && isNameValid
-                          ? 'border-emerald-400 focus:ring-emerald-300'
-                          : 'focus:ring-[#6096ba]/40 focus:border-[#274c77]'
+                      placeholder="Full Name"
+                      className={`w-full pl-7 pr-8 py-2 bg-transparent text-xs sm:text-sm font-medium focus:outline-none placeholder:text-slate-400 ${
+                        isDark ? 'text-white' : 'text-[#274c77]'
                       }`}
                     />
                     {signupName && isNameValid && (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500 absolute right-3 top-3" />
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500 absolute right-1 top-3" />
                     )}
                     {signupTouched.name && !isNameValid && (
-                      <AlertCircle className="w-4 h-4 text-rose-500 absolute right-3 top-3" />
+                      <AlertCircle className="w-4 h-4 text-rose-500 absolute right-1 top-3" />
                     )}
                   </div>
-                  {signupTouched.name && !isNameValid && (
-                    <p className="text-[10px] text-rose-500 font-semibold pl-1">
-                      Please enter your full name (minimum 2 characters).
-                    </p>
-                  )}
-                </div>
 
-                {/* Business Name Input */}
-                <div className="space-y-1">
-                  <label className={`block text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-[#274c77]'}`}>
-                    Business Name <span className="text-rose-500">*</span>
-                  </label>
-                  <div className="relative">
-                    <Building2 className={`w-4 h-4 absolute left-3.5 top-3 ${isDark ? 'text-slate-400' : 'text-[#6096ba]'}`} />
+                  {/* Underlined Business Name Field */}
+                  <div className="relative border-b border-slate-300 dark:border-slate-700 focus-within:border-[#274c77] transition-colors py-1">
+                    <Building2 className={`w-4 h-4 absolute left-0 top-3 ${isDark ? 'text-slate-400' : 'text-slate-500'}`} />
                     <input
                       type="text"
                       value={signupBusinessName}
                       onBlur={() => setSignupTouched((prev) => ({ ...prev, businessName: true }))}
                       onChange={(e) => setSignupBusinessName(e.target.value)}
-                      placeholder="e.g. Arc Company"
-                      className={`w-full pl-10 pr-9 py-2.5 border rounded-xl text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 ${
-                        isDark
-                          ? 'bg-slate-900/60 border-slate-700 text-white placeholder:text-slate-500'
-                          : 'bg-white/70 border-white/80 text-[#274c77] placeholder:text-slate-400'
-                      } ${
-                        signupTouched.businessName && !isBusinessNameValid
-                          ? 'border-rose-400 focus:ring-rose-300'
-                          : signupBusinessName && isBusinessNameValid
-                          ? 'border-emerald-400 focus:ring-emerald-300'
-                          : 'focus:ring-[#6096ba]/40 focus:border-[#274c77]'
+                      placeholder="Business Name"
+                      className={`w-full pl-7 pr-8 py-2 bg-transparent text-xs sm:text-sm font-medium focus:outline-none placeholder:text-slate-400 ${
+                        isDark ? 'text-white' : 'text-[#274c77]'
                       }`}
                     />
                     {signupBusinessName && isBusinessNameValid && (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500 absolute right-3 top-3" />
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500 absolute right-1 top-3" />
                     )}
                     {signupTouched.businessName && !isBusinessNameValid && (
-                      <AlertCircle className="w-4 h-4 text-rose-500 absolute right-3 top-3" />
+                      <AlertCircle className="w-4 h-4 text-rose-500 absolute right-1 top-3" />
                     )}
                   </div>
-                  {signupTouched.businessName && !isBusinessNameValid && (
-                    <p className="text-[10px] text-rose-500 font-semibold pl-1">
-                      Business name is required for tenant workspace.
-                    </p>
-                  )}
-                </div>
 
-                {/* Work Email Input */}
-                <div className="space-y-1">
-                  <label className={`block text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-[#274c77]'}`}>
-                    Work Email <span className="text-rose-500">*</span>
-                  </label>
-                  <div className="relative">
-                    <Mail className={`w-4 h-4 absolute left-3.5 top-3 ${isDark ? 'text-slate-400' : 'text-[#6096ba]'}`} />
+                  {/* Underlined Email Field */}
+                  <div className="relative border-b border-slate-300 dark:border-slate-700 focus-within:border-[#274c77] transition-colors py-1">
+                    <Mail className={`w-4 h-4 absolute left-0 top-3 ${isDark ? 'text-slate-400' : 'text-slate-500'}`} />
                     <input
                       type="email"
                       value={signupEmail}
                       onBlur={() => setSignupTouched((prev) => ({ ...prev, email: true }))}
                       onChange={(e) => setSignupEmail(e.target.value)}
-                      placeholder="aqureshi.1020@gmail.com"
-                      className={`w-full pl-10 pr-9 py-2.5 border rounded-xl text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 ${
-                        isDark
-                          ? 'bg-slate-900/60 border-slate-700 text-white placeholder:text-slate-500'
-                          : 'bg-white/70 border-white/80 text-[#274c77] placeholder:text-slate-400'
-                      } ${
-                        signupTouched.email && !isEmailValid(signupEmail)
-                          ? 'border-rose-400 focus:ring-rose-300'
-                          : signupEmail && isEmailValid(signupEmail)
-                          ? 'border-emerald-400 focus:ring-emerald-300'
-                          : 'focus:ring-[#6096ba]/40 focus:border-[#274c77]'
+                      placeholder="Email Address"
+                      className={`w-full pl-7 pr-8 py-2 bg-transparent text-xs sm:text-sm font-medium focus:outline-none placeholder:text-slate-400 ${
+                        isDark ? 'text-white' : 'text-[#274c77]'
                       }`}
                     />
                     {signupEmail && isEmailValid(signupEmail) && (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500 absolute right-3 top-3" />
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500 absolute right-1 top-3" />
                     )}
                     {signupTouched.email && !isEmailValid(signupEmail) && (
-                      <AlertCircle className="w-4 h-4 text-rose-500 absolute right-3 top-3" />
+                      <AlertCircle className="w-4 h-4 text-rose-500 absolute right-1 top-3" />
                     )}
                   </div>
-                  {signupTouched.email && !isEmailValid(signupEmail) && (
-                    <p className="text-[10px] text-rose-500 font-semibold pl-1">
-                      Please enter a valid email address.
-                    </p>
-                  )}
-                </div>
 
-                {/* Password Input with Strength Meter */}
-                <div className="space-y-1">
-                  <label className={`block text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-[#274c77]'}`}>
-                    Password <span className="text-rose-500">*</span>
-                  </label>
-                  <div className="relative">
-                    <Lock className={`w-4 h-4 absolute left-3.5 top-3 ${isDark ? 'text-slate-400' : 'text-[#6096ba]'}`} />
+                  {/* Underlined Password Field */}
+                  <div className="relative border-b border-slate-300 dark:border-slate-700 focus-within:border-[#274c77] transition-colors py-1">
+                    <Lock className={`w-4 h-4 absolute left-0 top-3 ${isDark ? 'text-slate-400' : 'text-slate-500'}`} />
                     <input
                       type={showPassword ? 'text' : 'password'}
                       value={signupPassword}
                       onBlur={() => setSignupTouched((prev) => ({ ...prev, password: true }))}
                       onChange={(e) => setSignupPassword(e.target.value)}
-                      placeholder="Minimum 6 characters"
-                      className={`w-full pl-10 pr-10 py-2.5 border rounded-xl text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 ${
-                        isDark
-                          ? 'bg-slate-900/60 border-slate-700 text-white placeholder:text-slate-500'
-                          : 'bg-white/70 border-white/80 text-[#274c77] placeholder:text-slate-400'
-                      } ${
-                        signupTouched.password && !isPasswordValid
-                          ? 'border-rose-400 focus:ring-rose-300'
-                          : signupPassword && isPasswordValid
-                          ? 'border-emerald-400 focus:ring-emerald-300'
-                          : 'focus:ring-[#6096ba]/40 focus:border-[#274c77]'
+                      placeholder="Password (min 6 characters)"
+                      className={`w-full pl-7 pr-10 py-2 bg-transparent text-xs sm:text-sm font-medium focus:outline-none placeholder:text-slate-400 ${
+                        isDark ? 'text-white' : 'text-[#274c77]'
                       }`}
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className={`absolute right-3.5 top-3 ${isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-400 hover:text-slate-600'}`}
+                      className="absolute right-1 top-3 text-slate-400 hover:text-slate-600"
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
 
-                  {/* Password Strength Indicator */}
-                  {signupPassword.length > 0 && (
-                    <div className="space-y-1 pt-1">
-                      <div className="flex items-center justify-between text-[10px] font-bold">
-                        <span className={isDark ? 'text-slate-400' : 'text-slate-500'}>Password strength:</span>
-                        <span
-                          className={
-                            passwordStrength.score === 1
-                              ? 'text-rose-500'
-                              : passwordStrength.score === 2
-                              ? 'text-amber-500'
-                              : 'text-emerald-500'
-                          }
-                        >
-                          {passwordStrength.label}
-                        </span>
-                      </div>
-                      <div className="h-1.5 w-full bg-slate-700/40 rounded-full overflow-hidden flex gap-1">
-                        <div
-                          className={`h-full transition-all duration-300 ${
-                            passwordStrength.score >= 1 ? passwordStrength.color : 'bg-transparent'
-                          } flex-1`}
-                        />
-                        <div
-                          className={`h-full transition-all duration-300 ${
-                            passwordStrength.score >= 2 ? passwordStrength.color : 'bg-transparent'
-                          } flex-1`}
-                        />
-                        <div
-                          className={`h-full transition-all duration-300 ${
-                            passwordStrength.score >= 3 ? passwordStrength.color : 'bg-transparent'
-                          } flex-1`}
-                        />
-                      </div>
-                    </div>
-                  )}
-                  {signupTouched.password && !isPasswordValid && (
-                    <p className="text-[10px] text-rose-500 font-semibold pl-1">
-                      Password must be at least 6 characters.
-                    </p>
-                  )}
-                </div>
-
-                {/* Confirm Password Input */}
-                <div className="space-y-1">
-                  <label className={`block text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-[#274c77]'}`}>
-                    Confirm Password <span className="text-rose-500">*</span>
-                  </label>
-                  <div className="relative">
-                    <ShieldCheck className={`w-4 h-4 absolute left-3.5 top-3 ${isDark ? 'text-slate-400' : 'text-[#6096ba]'}`} />
+                  {/* Underlined Confirm Password Field */}
+                  <div className="relative border-b border-slate-300 dark:border-slate-700 focus-within:border-[#274c77] transition-colors py-1">
+                    <ShieldCheck className={`w-4 h-4 absolute left-0 top-3 ${isDark ? 'text-slate-400' : 'text-slate-500'}`} />
                     <input
                       type={showConfirmPassword ? 'text' : 'password'}
                       value={signupConfirmPassword}
                       onBlur={() => setSignupTouched((prev) => ({ ...prev, confirmPassword: true }))}
                       onChange={(e) => setSignupConfirmPassword(e.target.value)}
-                      placeholder="Re-enter password"
-                      className={`w-full pl-10 pr-10 py-2.5 border rounded-xl text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 ${
-                        isDark
-                          ? 'bg-slate-900/60 border-slate-700 text-white placeholder:text-slate-500'
-                          : 'bg-white/70 border-white/80 text-[#274c77] placeholder:text-slate-400'
-                      } ${
-                        signupTouched.confirmPassword && !isConfirmPasswordValid
-                          ? 'border-rose-400 focus:ring-rose-300'
-                          : signupConfirmPassword && isConfirmPasswordValid
-                          ? 'border-emerald-400 focus:ring-emerald-300'
-                          : 'focus:ring-[#6096ba]/40 focus:border-[#274c77]'
+                      placeholder="Confirm Password"
+                      className={`w-full pl-7 pr-10 py-2 bg-transparent text-xs sm:text-sm font-medium focus:outline-none placeholder:text-slate-400 ${
+                        isDark ? 'text-white' : 'text-[#274c77]'
                       }`}
                     />
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className={`absolute right-3.5 top-3 ${isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-400 hover:text-slate-600'}`}
+                      className="absolute right-1 top-3 text-slate-400 hover:text-slate-600"
                     >
-                      {showConfirmPassword ? (
-                        <EyeOff className="w-4 h-4" />
-                      ) : (
-                        <Eye className="w-4 h-4" />
-                      )}
+                      {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
-                  {signupTouched.confirmPassword && !isConfirmPasswordValid && (
-                    <p className="text-[10px] text-rose-500 font-semibold pl-1">
-                      Passwords do not match.
-                    </p>
-                  )}
-                </div>
 
-                {/* Terms Checkbox */}
-                <div className="flex items-start gap-2 pt-1">
-                  <input
-                    type="checkbox"
-                    id="agreedTerms"
-                    checked={agreedTerms}
-                    onChange={(e) => setAgreedTerms(e.target.checked)}
-                    className="w-4 h-4 mt-0.5 rounded text-[#274c77] focus:ring-[#6096ba] border-slate-600 cursor-pointer"
-                  />
-                  <label htmlFor="agreedTerms" className={`text-xs cursor-pointer leading-tight ${isDark ? 'text-slate-300' : 'text-[#274c77]'}`}>
-                    I agree to the{' '}
-                    <span className="font-bold underline">Terms of Service</span> and{' '}
-                    <span className="font-bold underline">Privacy Policy</span>.
-                  </label>
-                </div>
+                  {/* Submit Button Row */}
+                  <div className="flex items-center justify-between pt-3">
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        id="terms"
+                        checked={agreedTerms}
+                        onChange={(e) => setAgreedTerms(e.target.checked)}
+                        className="w-4 h-4 text-[#274c77] rounded cursor-pointer"
+                      />
+                      <label htmlFor="terms" className="text-[11px] text-slate-500 cursor-pointer">
+                        I agree to Terms
+                      </label>
+                    </div>
 
-                {/* Submit Button */}
-                <Button
-                  type="submit"
-                  variant="primary"
-                  isLoading={isLoading}
-                  className="w-full py-3 bg-[#274c77] hover:bg-[#1d3859] text-white rounded-xl font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer mt-2"
+                    <button
+                      type="submit"
+                      disabled={isLoading}
+                      className="px-8 py-2.5 bg-[#274c77] hover:bg-[#1e3b5e] text-white font-black text-xs uppercase tracking-widest rounded-full shadow-lg hover:shadow-xl transition-all cursor-pointer transform hover:scale-105 disabled:opacity-50"
+                    >
+                      {isLoading ? 'CREATING...' : 'SIGN UP'}
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+
+            {/* ================= BOTTOM SOCIAL LOGIN BAR (Reference Image Style) ================= */}
+            <div className="mt-8 pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
+              <span className="font-semibold text-[11px]">Or Login With</span>
+
+              <div className="flex items-center gap-3">
+                {/* Google Button */}
+                <button
+                  type="button"
+                  onClick={handleFillDemoCredentials}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-[11px] shadow-2xs transition-all cursor-pointer"
                 >
-                  <span>Create SaaS Account</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
-              </form>
-            )}
+                  <span className="text-red-500 font-black">G</span>
+                  <span>Google</span>
+                </button>
+
+                {/* Facebook Button */}
+                <button
+                  type="button"
+                  onClick={handleFillDemoCredentials}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-[11px] shadow-2xs transition-all cursor-pointer"
+                >
+                  <span className="text-blue-600 font-black">f</span>
+                  <span>Facebook</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="w-full max-w-6xl mx-auto text-center py-2 text-[11px] font-medium opacity-60 z-10">
+      <footer className="w-full max-w-6xl mx-auto text-center py-2 text-[11px] font-medium text-white/60 z-10">
         © 2026 Bookify Inc. All rights reserved.
       </footer>
     </div>
