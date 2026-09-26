@@ -1,6 +1,0 @@
-{
-  "name": "Bookify - Branded Appointment Booking SaaS",
-  "description": "Production SaaS enabling small businesses to create, customize, and publish fully branded appointment and booking experiences.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
