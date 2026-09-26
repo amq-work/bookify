@@ -13,10 +13,6 @@ import {
   Sun,
   Moon,
   ArrowRight,
-  Calendar,
-  BarChart3,
-  Users,
-  Zap,
 } from 'lucide-react';
 
 interface AuthScreenProps {
@@ -38,14 +34,13 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [authSuccessMessage, setAuthSuccessMessage] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
 
-  // --- Login Form State ---
+  // Login form
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [loginError, setLoginError] = useState('');
 
-  // --- Signup Form State ---
+  // Signup form
   const [signupName, setSignupName] = useState('');
   const [signupBusinessName, setSignupBusinessName] = useState('');
   const [signupEmail, setSignupEmail] = useState('');
@@ -55,9 +50,9 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
   const [signupTouched, setSignupTouched] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 50);
-    return () => clearTimeout(t);
-  }, []);
+    setShowPassword(false);
+    setShowConfirmPassword(false);
+  }, [mode]);
 
   const switchMode = (newMode: 'login' | 'signup') => {
     if (newMode === mode || isAnimating) return;
@@ -67,7 +62,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
     setTimeout(() => {
       setMode(newMode);
       setIsAnimating(false);
-    }, 300);
+    }, 280);
   };
 
   const handleFillDemoCredentials = () => {
@@ -80,8 +75,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
   const isNameValid = signupName.trim().length >= 2;
   const isBusinessNameValid = signupBusinessName.trim().length >= 2;
   const isPasswordValid = signupPassword.length >= 6;
-  const isConfirmPasswordValid =
-    signupConfirmPassword.length > 0 && signupConfirmPassword === signupPassword;
+  const isConfirmPasswordValid = signupConfirmPassword.length > 0 && signupConfirmPassword === signupPassword;
 
   const getPasswordStrength = (pass: string) => {
     if (!pass) return { score: 0, label: '', color: 'bg-transparent' };
@@ -110,59 +104,61 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
 
   const handleSignupSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const touched = { name: true, businessName: true, email: true, password: true, confirmPassword: true };
-    setSignupTouched(touched);
+    setSignupTouched({ name: true, businessName: true, email: true, password: true, confirmPassword: true });
     if (!isNameValid || !isBusinessNameValid || !isEmailValid(signupEmail) || !isPasswordValid || !isConfirmPasswordValid || !agreedTerms) return;
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      setAuthSuccessMessage('Account created — launching dashboard!');
+      setAuthSuccessMessage('Workspace created — launching dashboard!');
       setTimeout(() => onSuccess?.({ email: signupEmail, name: signupName, businessName: signupBusinessName }), 900);
     }, 1200);
   };
 
   const isDark = theme === 'dark';
-  const curveCls = isDark ? 'auth-nav-active auth-nav-active-dark' : 'auth-nav-active auth-nav-active-light';
-  const formBg = isDark ? '#111c35' : '#f8fafc';
-  const tabActiveBg = isDark ? 'bg-[#111c35]' : 'bg-[#f8fafc]';
-  const textPrimary = isDark ? 'text-white' : 'text-[#274c77]';
-  const textMuted = isDark ? 'text-slate-400' : 'text-slate-500';
-  const borderB = isDark ? 'border-slate-700' : 'border-slate-300';
-  const inputText = isDark ? 'text-white placeholder:text-slate-500' : 'text-[#274c77] placeholder:text-slate-400';
+  // Colour tokens
+  const rpBg       = isDark ? '#111c35' : '#f8fafc';    // right-panel background
+  const textMain   = isDark ? 'text-white' : 'text-[#274c77]';
+  const textSub    = isDark ? 'text-slate-400' : 'text-slate-500';
+  const inputBase  = isDark
+    ? 'bg-slate-900/60 border-slate-700 focus-within:border-[#6096ba]'
+    : 'bg-white border-slate-200 focus-within:border-[#274c77] shadow-xs focus-within:shadow-sm';
+  const inputText  = isDark ? 'text-white placeholder:text-slate-500' : 'text-[#274c77] placeholder:text-slate-400';
 
-  // Feature bullets displayed in left panel
-  const features = [
-    { icon: Calendar, label: 'Smart booking engine' },
-    { icon: BarChart3, label: 'Real-time analytics' },
-    { icon: Users, label: 'Multi-tenant support' },
-    { icon: Zap, label: 'Instant deployment' },
-  ];
+  // Active-tab CSS classes  (defined in index.css)
+  const tabActiveCls = `auth-tab-active ${isDark ? 'auth-tab-active-dark' : 'auth-tab-active-light'}`;
 
   return (
     <div
-      className={`fixed inset-0 w-full h-full flex overflow-hidden transition-colors duration-500 font-sans ${
+      className={`fixed inset-0 w-full h-full flex overflow-hidden font-sans transition-colors duration-500 ${
         isDark ? 'bg-[#0b1329]' : 'bg-[#e7ecef]'
       }`}
     >
-      {/* ═══════════════════ LEFT PANEL ═══════════════════ */}
+      {/* ═══════════════════════════════════════════
+          LEFT PANEL — brand + merged tab buttons
+          ═══════════════════════════════════════════ */}
       <div
-        className="relative hidden md:flex flex-col justify-between overflow-hidden shrink-0 transition-all duration-500"
-        style={{ width: '38%', background: 'linear-gradient(160deg, #274c77 0%, #1e3b5e 55%, #14263e 100%)' }}
+        className="relative hidden md:flex flex-col justify-between overflow-visible shrink-0 transition-all duration-500"
+        style={{
+          width: '36%',
+          background: 'linear-gradient(160deg, #274c77 0%, #1e3b5e 55%, #14263e 100%)',
+        }}
       >
         {/* Decorative blobs */}
-        <div className="absolute top-0 left-0 w-80 h-80 bg-[#6096ba]/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#a3cef1]/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2 pointer-events-none" />
-        {/* Subtle diagonal pattern */}
-        <div className="absolute inset-0 pointer-events-none opacity-[0.06]"
+        <div className="absolute top-0 left-0 w-72 h-72 bg-[#6096ba]/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-80 h-80 bg-[#a3cef1]/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2 pointer-events-none" />
+
+        {/* Subtle diagonal stripe texture */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.04]"
           style={{
-            backgroundImage: `repeating-linear-gradient(45deg, rgba(255,255,255,1) 0px, rgba(255,255,255,1) 1px, transparent 1px, transparent 40px)`,
+            backgroundImage: `repeating-linear-gradient(45deg, rgba(255,255,255,1) 0px, rgba(255,255,255,1) 1px, transparent 1px, transparent 36px)`,
           }}
         />
 
-        {/* Brand Header */}
+        {/* ── Brand header ── */}
         <div className="relative z-10 px-10 pt-10">
-          <div className="flex items-center gap-3 mb-12">
-            <div className="relative w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/30 shadow-lg">
+          <div className="flex items-center gap-3 mb-14">
+            <div className="relative w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/30 shadow-lg shrink-0">
               <div className="w-7 h-7 rounded-full border-2 border-white/90 flex items-center justify-center">
                 <div className="w-3.5 h-3.5 rounded-full bg-white/30 flex items-center justify-center">
                   <div className="w-1.5 h-1.5 rounded-full bg-white" />
@@ -172,107 +168,116 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
             <span className="text-2xl text-white font-heading tracking-wide">Bookify</span>
           </div>
 
-          <h1 className="text-4xl text-white leading-tight mb-3">
+          <h1 className="text-[2.4rem] leading-[1.15] text-white mb-3">
             Scheduling<br />
             <span className="text-[#a3cef1]">reimagined.</span>
           </h1>
-          <p className="text-sm text-white/60 leading-relaxed max-w-xs">
+          <p className="text-sm text-white/55 leading-relaxed max-w-xs">
             Your all-in-one SaaS booking platform. Manage appointments, services and clients — all in one place.
           </p>
-
-          {/* Feature bullets */}
-          <div className="mt-8 space-y-3">
-            {features.map(({ icon: Icon, label }) => (
-              <div key={label} className="flex items-center gap-3 text-xs text-white/70">
-                <div className="w-7 h-7 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
-                  <Icon className="w-3.5 h-3.5 text-[#a3cef1]" />
-                </div>
-                <span>{label}</span>
-              </div>
-            ))}
-          </div>
         </div>
 
-        {/* ── NAV TABS (sidebar-style merged cutout) ── */}
-        <div className="relative z-10 px-0 pb-0 flex flex-col gap-0 mb-16">
-          {/* LOGIN Tab */}
+        {/* ════════════════════════════════════════════
+            TAB NAV  —  sidebar-style merged cutout
+            Each button is FULL-WIDTH (no right padding)
+            so its right edge sits exactly at the panel
+            boundary, letting the ::before/::after curves
+            appear correctly against the panel gradient.
+            ════════════════════════════════════════════ */}
+        <div className="relative z-10 flex flex-col gap-1 mb-20 pr-0">
+          {/* ── Sign In Tab ── */}
           <button
             type="button"
             onClick={() => switchMode('login')}
-            className={`relative flex items-center gap-3 px-10 py-4 w-full text-left cursor-pointer transition-all duration-300 group ${
+            className={[
+              'relative flex items-center gap-3 w-full pl-10 pr-6 py-5 cursor-pointer',
+              'transition-all duration-300 ease-in-out group',
               mode === 'login'
-                ? `${curveCls} ${tabActiveBg} ${textPrimary}`
-                : 'text-white/60 hover:text-white'
-            }`}
+                ? `${tabActiveCls} ${textMain}`
+                : 'text-white/55 hover:text-white/90',
+            ].join(' ')}
+            style={mode === 'login' ? { backgroundColor: rpBg } : {}}
           >
+            {/* Icon pill */}
             <div
-              className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all duration-300 ${
+              className={[
+                'w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300',
                 mode === 'login'
                   ? 'bg-[#274c77] text-white shadow-lg shadow-[#274c77]/30'
-                  : 'bg-white/10 text-white/60 group-hover:bg-white/20'
-              }`}
+                  : 'bg-white/10 text-white/55 group-hover:bg-white/20',
+              ].join(' ')}
             >
               <User className="w-4 h-4" />
             </div>
-            <div>
-              <span className={`text-sm font-semibold tracking-wide block ${mode === 'login' ? textPrimary : 'text-white/70'}`}>
+
+            <div className="text-left">
+              <span className={`text-sm font-semibold block tracking-wide ${mode === 'login' ? textMain : 'text-white/70 group-hover:text-white/90'}`}>
                 Sign In
               </span>
-              <span className={`text-[10px] ${mode === 'login' ? textMuted : 'text-white/40'}`}>
+              <span className={`text-[10px] ${mode === 'login' ? textSub : 'text-white/35'}`}>
                 Access your dashboard
               </span>
             </div>
+
             {mode === 'login' && (
-              <ArrowRight className={`w-4 h-4 ml-auto ${isDark ? 'text-slate-400' : 'text-[#6096ba]'}`} />
+              <ArrowRight className={`w-4 h-4 ml-auto ${isDark ? 'text-slate-500' : 'text-[#6096ba]'}`} />
             )}
           </button>
 
-          {/* SIGN UP Tab */}
+          {/* ── Create Account Tab ── */}
           <button
             type="button"
             onClick={() => switchMode('signup')}
-            className={`relative flex items-center gap-3 px-10 py-4 w-full text-left cursor-pointer transition-all duration-300 group ${
+            className={[
+              'relative flex items-center gap-3 w-full pl-10 pr-6 py-5 cursor-pointer',
+              'transition-all duration-300 ease-in-out group',
               mode === 'signup'
-                ? `${curveCls} ${tabActiveBg} ${textPrimary}`
-                : 'text-white/60 hover:text-white'
-            }`}
+                ? `${tabActiveCls} ${textMain}`
+                : 'text-white/55 hover:text-white/90',
+            ].join(' ')}
+            style={mode === 'signup' ? { backgroundColor: rpBg } : {}}
           >
             <div
-              className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all duration-300 ${
+              className={[
+                'w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300',
                 mode === 'signup'
                   ? 'bg-[#274c77] text-white shadow-lg shadow-[#274c77]/30'
-                  : 'bg-white/10 text-white/60 group-hover:bg-white/20'
-              }`}
+                  : 'bg-white/10 text-white/55 group-hover:bg-white/20',
+              ].join(' ')}
             >
               <Building2 className="w-4 h-4" />
             </div>
-            <div>
-              <span className={`text-sm font-semibold tracking-wide block ${mode === 'signup' ? textPrimary : 'text-white/70'}`}>
+
+            <div className="text-left">
+              <span className={`text-sm font-semibold block tracking-wide ${mode === 'signup' ? textMain : 'text-white/70 group-hover:text-white/90'}`}>
                 Create Account
               </span>
-              <span className={`text-[10px] ${mode === 'signup' ? textMuted : 'text-white/40'}`}>
+              <span className={`text-[10px] ${mode === 'signup' ? textSub : 'text-white/35'}`}>
                 Start your free workspace
               </span>
             </div>
+
             {mode === 'signup' && (
-              <ArrowRight className={`w-4 h-4 ml-auto ${isDark ? 'text-slate-400' : 'text-[#6096ba]'}`} />
+              <ArrowRight className={`w-4 h-4 ml-auto ${isDark ? 'text-slate-500' : 'text-[#6096ba]'}`} />
             )}
           </button>
         </div>
 
-        {/* Left panel footer */}
-        <div className="relative z-10 px-10 pb-8 text-[10px] text-white/30">
+        {/* Footer */}
+        <div className="relative z-10 px-10 pb-8 text-[10px] text-white/25">
           © 2026 Bookify Inc. · Multi-tenant SaaS Platform
         </div>
       </div>
 
-      {/* ═══════════════════ RIGHT PANEL ═══════════════════ */}
+      {/* ═══════════════════════════════════════════
+          RIGHT PANEL — form area
+          ═══════════════════════════════════════════ */}
       <div
         className="flex-1 flex flex-col h-full overflow-y-auto"
-        style={{ backgroundColor: formBg }}
+        style={{ backgroundColor: rpBg }}
       >
-        {/* Top Right Controls */}
-        <div className="flex items-center justify-between px-8 pt-7 pb-0 shrink-0">
+        {/* Top bar */}
+        <div className="flex items-center justify-between px-8 pt-7 shrink-0">
           {/* Mobile brand */}
           <div className="flex items-center gap-2 md:hidden">
             <div className="w-8 h-8 rounded-xl bg-[#274c77] flex items-center justify-center">
@@ -280,12 +285,11 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                 <div className="w-2 h-2 rounded-full bg-white" />
               </div>
             </div>
-            <span className={`text-sm font-semibold ${textPrimary}`}>Bookify</span>
+            <span className={`text-sm font-semibold ${textMain}`}>Bookify</span>
           </div>
-
           <div className="hidden md:block" />
 
-          {/* Theme Toggle */}
+          {/* Theme toggle */}
           {onToggleTheme && (
             <button
               type="button"
@@ -302,51 +306,55 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
           )}
         </div>
 
-        {/* Mobile Mode Switcher */}
+        {/* Mobile tab switcher */}
         <div className="md:hidden px-8 pt-4">
           <div className={`flex p-1 rounded-2xl border gap-1 ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200 shadow-xs'}`}>
-            <button
-              onClick={() => switchMode('login')}
-              className={`flex-1 py-2.5 text-xs font-semibold rounded-xl transition-all cursor-pointer ${mode === 'login' ? 'bg-[#274c77] text-white shadow-sm' : textMuted}`}
-            >
-              Sign In
-            </button>
-            <button
-              onClick={() => switchMode('signup')}
-              className={`flex-1 py-2.5 text-xs font-semibold rounded-xl transition-all cursor-pointer ${mode === 'signup' ? 'bg-[#274c77] text-white shadow-sm' : textMuted}`}
-            >
-              Create Account
-            </button>
+            {(['login', 'signup'] as const).map((m) => (
+              <button
+                key={m}
+                onClick={() => switchMode(m)}
+                className={`flex-1 py-2.5 text-xs font-semibold rounded-xl transition-all cursor-pointer ${
+                  mode === m ? 'bg-[#274c77] text-white shadow-sm' : textSub
+                }`}
+              >
+                {m === 'login' ? 'Sign In' : 'Create Account'}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Form Content */}
+        {/* ── Form Content ── */}
         <div
-          className={`flex-1 flex flex-col justify-center px-8 sm:px-12 lg:px-16 py-8 transition-all duration-300 ${
+          className={`flex-1 flex flex-col justify-center px-8 sm:px-12 lg:px-16 py-8 transition-all duration-280 ${
             isAnimating ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'
           }`}
-          style={{ maxWidth: 540, width: '100%', margin: '0 auto' }}
+          style={{ maxWidth: 520, width: '100%', margin: '0 auto' }}
         >
+          {/* Success state */}
           {authSuccessMessage ? (
-            <div className="text-center space-y-4 py-16 animate-in zoom-in-95 duration-300">
+            <div className="text-center space-y-5 py-16">
               <div className="w-20 h-20 mx-auto rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center">
                 <CheckCircle2 className="w-10 h-10 text-emerald-500" />
               </div>
-              <h2 className={`text-2xl ${textPrimary}`}>{authSuccessMessage}</h2>
-              <p className={`text-sm ${textMuted}`}>Opening your dashboard...</p>
-              <div className="w-48 h-1.5 mx-auto rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
-                <div className="h-full bg-[#274c77] rounded-full animate-[loading_1.2s_ease-in-out_forwards]" style={{width: '100%', animation: 'loading 1.2s ease-in-out forwards'}} />
+              <h2 className={`text-2xl ${textMain}`}>{authSuccessMessage}</h2>
+              <p className={`text-sm ${textSub}`}>Opening your dashboard…</p>
+              <div className={`w-48 h-1.5 mx-auto rounded-full overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-slate-200'}`}>
+                <div
+                  className="h-full bg-[#274c77] rounded-full"
+                  style={{ animation: 'loading-bar 1.2s ease-in-out forwards' }}
+                />
               </div>
             </div>
+
           ) : mode === 'login' ? (
-            /* ────────────────────── LOGIN ────────────────────── */
+            /* ─────────────── LOGIN FORM ─────────────── */
             <div>
               <div className="mb-8">
-                <h2 className={`text-3xl mb-1.5 ${textPrimary}`}>Welcome back</h2>
-                <p className={`text-sm ${textMuted}`}>Sign in to your Bookify workspace.</p>
+                <h2 className={`text-3xl mb-1.5 ${textMain}`}>Welcome back</h2>
+                <p className={`text-sm ${textSub}`}>Sign in to your Bookify workspace.</p>
               </div>
 
-              {/* Demo credentials box */}
+              {/* Demo credentials hint */}
               <div
                 className={`mb-6 p-3.5 rounded-2xl border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 ${
                   isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-blue-50/70 border-blue-100'
@@ -381,15 +389,11 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
               <form onSubmit={handleLoginSubmit} className="space-y-5">
                 {/* Email */}
                 <div>
-                  <label className={`block text-xs font-semibold mb-2 uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                  <label className={`block text-xs font-semibold mb-2 uppercase tracking-wider ${textSub}`}>
                     Email Address
                   </label>
-                  <div className={`flex items-center gap-3 px-4 py-3 rounded-2xl border transition-all ${
-                    isDark
-                      ? 'bg-slate-900/60 border-slate-700 focus-within:border-[#6096ba]'
-                      : 'bg-white border-slate-200 focus-within:border-[#274c77] shadow-xs focus-within:shadow-sm'
-                  }`}>
-                    <Mail className={`w-4 h-4 shrink-0 ${textMuted}`} />
+                  <div className={`flex items-center gap-3 px-4 py-3 rounded-2xl border transition-all ${inputBase}`}>
+                    <Mail className={`w-4 h-4 shrink-0 ${textSub}`} />
                     <input
                       type="email"
                       value={loginEmail}
@@ -403,23 +407,17 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                 {/* Password */}
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <label className={`text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                      Password
-                    </label>
-                    <a
-                      href="#forgot"
-                      onClick={(e) => { e.preventDefault(); alert('Demo: reset link sent!'); }}
-                      className="text-[11px] font-semibold text-[#6096ba] hover:text-[#274c77] hover:underline transition-colors"
+                    <label className={`text-xs font-semibold uppercase tracking-wider ${textSub}`}>Password</label>
+                    <button
+                      type="button"
+                      onClick={() => alert('Demo: reset email sent!')}
+                      className="text-[11px] font-semibold text-[#6096ba] hover:text-[#274c77] hover:underline transition-colors cursor-pointer"
                     >
                       Forgot Password?
-                    </a>
+                    </button>
                   </div>
-                  <div className={`flex items-center gap-3 px-4 py-3 rounded-2xl border transition-all ${
-                    isDark
-                      ? 'bg-slate-900/60 border-slate-700 focus-within:border-[#6096ba]'
-                      : 'bg-white border-slate-200 focus-within:border-[#274c77] shadow-xs focus-within:shadow-sm'
-                  }`}>
-                    <Lock className={`w-4 h-4 shrink-0 ${textMuted}`} />
+                  <div className={`flex items-center gap-3 px-4 py-3 rounded-2xl border transition-all ${inputBase}`}>
+                    <Lock className={`w-4 h-4 shrink-0 ${textSub}`} />
                     <input
                       type={showPassword ? 'text' : 'password'}
                       value={loginPassword}
@@ -427,7 +425,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                       placeholder="••••••••"
                       className={`flex-1 bg-transparent text-sm focus:outline-none ${inputText}`}
                     />
-                    <button type="button" onClick={() => setShowPassword(!showPassword)} className={`${textMuted} hover:text-current transition-colors`}>
+                    <button type="button" onClick={() => setShowPassword(!showPassword)} className={`${textSub} hover:text-current transition-colors cursor-pointer`}>
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
@@ -437,38 +435,29 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#274c77] hover:bg-[#1e3b5e] active:bg-[#14263e] text-white text-sm font-semibold rounded-2xl shadow-lg shadow-[#274c77]/25 hover:shadow-xl hover:shadow-[#274c77]/30 transition-all duration-200 cursor-pointer disabled:opacity-60 transform hover:scale-[1.01] active:scale-[0.99]"
+                  className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#274c77] hover:bg-[#1e3b5e] active:bg-[#14263e] text-white text-sm font-semibold rounded-2xl shadow-lg shadow-[#274c77]/25 hover:shadow-xl hover:shadow-[#274c77]/30 transition-all duration-200 cursor-pointer disabled:opacity-60 hover:scale-[1.01] active:scale-[0.99]"
                 >
                   {isLoading ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      <span>Signing in…</span>
-                    </>
+                    <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /><span>Signing in…</span></>
                   ) : (
-                    <>
-                      <span>Sign In to Dashboard</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
+                    <><span>Sign In to Dashboard</span><ArrowRight className="w-4 h-4" /></>
                   )}
                 </button>
               </form>
 
-              {/* Social Divider */}
+              {/* Social row */}
               <div className="mt-6 flex items-center gap-3">
                 <div className={`flex-1 h-px ${isDark ? 'bg-slate-800' : 'bg-slate-200'}`} />
-                <span className={`text-[11px] font-medium ${textMuted}`}>or continue with</span>
+                <span className={`text-[11px] font-medium ${textSub}`}>or continue with</span>
                 <div className={`flex-1 h-px ${isDark ? 'bg-slate-800' : 'bg-slate-200'}`} />
               </div>
 
               <div className="mt-4 grid grid-cols-2 gap-3">
-                {[
-                  { name: 'Google', letter: 'G', color: 'text-red-500', handler: handleFillDemoCredentials },
-                  { name: 'Facebook', letter: 'f', color: 'text-blue-600', handler: handleFillDemoCredentials },
-                ].map(({ name, letter, color, handler }) => (
+                {[{ name: 'Google', letter: 'G', color: 'text-red-500' }, { name: 'Facebook', letter: 'f', color: 'text-blue-600' }].map(({ name, letter, color }) => (
                   <button
                     key={name}
                     type="button"
-                    onClick={handler}
+                    onClick={handleFillDemoCredentials}
                     className={`flex items-center justify-center gap-2 py-2.5 rounded-2xl border text-xs font-semibold cursor-pointer transition-all hover:scale-[1.02] active:scale-95 ${
                       isDark
                         ? 'bg-slate-900/60 border-slate-800 text-slate-200 hover:bg-slate-800'
@@ -481,37 +470,31 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                 ))}
               </div>
 
-              {/* Mobile switch */}
-              <p className={`text-center mt-6 text-xs ${textMuted}`}>
+              <p className={`text-center mt-6 text-xs ${textSub}`}>
                 Don't have an account?{' '}
-                <button type="button" onClick={() => switchMode('signup')} className="text-[#274c77] font-semibold hover:underline cursor-pointer dark:text-[#6096ba]">
+                <button type="button" onClick={() => switchMode('signup')} className="text-[#274c77] font-semibold hover:underline cursor-pointer">
                   Create one
                 </button>
               </p>
             </div>
 
           ) : (
-            /* ────────────────────── SIGN UP ────────────────────── */
+            /* ─────────────── SIGN UP FORM ─────────────── */
             <div>
-              <div className="mb-8">
-                <h2 className={`text-3xl mb-1.5 ${textPrimary}`}>Create workspace</h2>
-                <p className={`text-sm ${textMuted}`}>Start your Bookify SaaS journey in minutes.</p>
+              <div className="mb-7">
+                <h2 className={`text-3xl mb-1.5 ${textMain}`}>Create workspace</h2>
+                <p className={`text-sm ${textSub}`}>Start your Bookify SaaS journey in minutes.</p>
               </div>
 
               <form onSubmit={handleSignupSubmit} className="space-y-4">
                 {/* Full Name */}
-                <div>
-                  <label className={`block text-xs font-semibold mb-1.5 uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                    Full Name <span className="text-rose-500">*</span>
-                  </label>
-                  <div className={`flex items-center gap-3 px-4 py-3 rounded-2xl border transition-all ${
-                    signupTouched.name && !isNameValid
-                      ? 'border-rose-400 bg-rose-50/40'
-                      : signupName && isNameValid
-                      ? isDark ? 'border-emerald-600 bg-slate-900/60' : 'border-emerald-400 bg-white'
-                      : isDark ? 'bg-slate-900/60 border-slate-700 focus-within:border-[#6096ba]' : 'bg-white border-slate-200 focus-within:border-[#274c77] shadow-xs'
-                  }`}>
-                    <User className={`w-4 h-4 shrink-0 ${textMuted}`} />
+                <Field label="Full Name" required error={signupTouched.name && !isNameValid ? 'Min 2 characters required' : ''}>
+                  <InputRow
+                    icon={<User className="w-4 h-4 shrink-0" />}
+                    valid={signupName ? isNameValid : undefined}
+                    touched={signupTouched.name}
+                    inputBase={inputBase}
+                  >
                     <input
                       type="text"
                       value={signupName}
@@ -520,27 +503,17 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                       placeholder="Aayan Qureshi"
                       className={`flex-1 bg-transparent text-sm focus:outline-none ${inputText}`}
                     />
-                    {signupName && isNameValid && <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />}
-                    {signupTouched.name && !isNameValid && <AlertCircle className="w-4 h-4 text-rose-500 shrink-0" />}
-                  </div>
-                  {signupTouched.name && !isNameValid && (
-                    <p className="text-[10px] text-rose-500 mt-1 pl-1">Min 2 characters required</p>
-                  )}
-                </div>
+                  </InputRow>
+                </Field>
 
                 {/* Business Name */}
-                <div>
-                  <label className={`block text-xs font-semibold mb-1.5 uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                    Business Name <span className="text-rose-500">*</span>
-                  </label>
-                  <div className={`flex items-center gap-3 px-4 py-3 rounded-2xl border transition-all ${
-                    signupTouched.businessName && !isBusinessNameValid
-                      ? 'border-rose-400 bg-rose-50/40'
-                      : signupBusinessName && isBusinessNameValid
-                      ? isDark ? 'border-emerald-600 bg-slate-900/60' : 'border-emerald-400 bg-white'
-                      : isDark ? 'bg-slate-900/60 border-slate-700 focus-within:border-[#6096ba]' : 'bg-white border-slate-200 focus-within:border-[#274c77] shadow-xs'
-                  }`}>
-                    <Building2 className={`w-4 h-4 shrink-0 ${textMuted}`} />
+                <Field label="Business Name" required error={signupTouched.businessName && !isBusinessNameValid ? 'Min 2 characters required' : ''}>
+                  <InputRow
+                    icon={<Building2 className="w-4 h-4 shrink-0" />}
+                    valid={signupBusinessName ? isBusinessNameValid : undefined}
+                    touched={signupTouched.businessName}
+                    inputBase={inputBase}
+                  >
                     <input
                       type="text"
                       value={signupBusinessName}
@@ -549,24 +522,17 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                       placeholder="Arc Company"
                       className={`flex-1 bg-transparent text-sm focus:outline-none ${inputText}`}
                     />
-                    {signupBusinessName && isBusinessNameValid && <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />}
-                    {signupTouched.businessName && !isBusinessNameValid && <AlertCircle className="w-4 h-4 text-rose-500 shrink-0" />}
-                  </div>
-                </div>
+                  </InputRow>
+                </Field>
 
                 {/* Email */}
-                <div>
-                  <label className={`block text-xs font-semibold mb-1.5 uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                    Work Email <span className="text-rose-500">*</span>
-                  </label>
-                  <div className={`flex items-center gap-3 px-4 py-3 rounded-2xl border transition-all ${
-                    signupTouched.email && !isEmailValid(signupEmail)
-                      ? 'border-rose-400 bg-rose-50/40'
-                      : signupEmail && isEmailValid(signupEmail)
-                      ? isDark ? 'border-emerald-600 bg-slate-900/60' : 'border-emerald-400 bg-white'
-                      : isDark ? 'bg-slate-900/60 border-slate-700 focus-within:border-[#6096ba]' : 'bg-white border-slate-200 focus-within:border-[#274c77] shadow-xs'
-                  }`}>
-                    <Mail className={`w-4 h-4 shrink-0 ${textMuted}`} />
+                <Field label="Work Email" required error={signupTouched.email && !isEmailValid(signupEmail) ? 'Invalid email address' : ''}>
+                  <InputRow
+                    icon={<Mail className="w-4 h-4 shrink-0" />}
+                    valid={signupEmail ? isEmailValid(signupEmail) : undefined}
+                    touched={signupTouched.email}
+                    inputBase={inputBase}
+                  >
                     <input
                       type="email"
                       value={signupEmail}
@@ -575,24 +541,22 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                       placeholder="aqureshi.1020@gmail.com"
                       className={`flex-1 bg-transparent text-sm focus:outline-none ${inputText}`}
                     />
-                    {signupEmail && isEmailValid(signupEmail) && <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />}
-                    {signupTouched.email && !isEmailValid(signupEmail) && <AlertCircle className="w-4 h-4 text-rose-500 shrink-0" />}
-                  </div>
-                </div>
+                  </InputRow>
+                </Field>
 
                 {/* Password */}
-                <div>
-                  <label className={`block text-xs font-semibold mb-1.5 uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                    Password <span className="text-rose-500">*</span>
-                  </label>
-                  <div className={`flex items-center gap-3 px-4 py-3 rounded-2xl border transition-all ${
-                    signupTouched.password && !isPasswordValid
-                      ? 'border-rose-400 bg-rose-50/40'
-                      : signupPassword && isPasswordValid
-                      ? isDark ? 'border-emerald-600 bg-slate-900/60' : 'border-emerald-400 bg-white'
-                      : isDark ? 'bg-slate-900/60 border-slate-700 focus-within:border-[#6096ba]' : 'bg-white border-slate-200 focus-within:border-[#274c77] shadow-xs'
-                  }`}>
-                    <Lock className={`w-4 h-4 shrink-0 ${textMuted}`} />
+                <Field label="Password" required error={signupTouched.password && !isPasswordValid ? 'Min 6 characters' : ''}>
+                  <InputRow
+                    icon={<Lock className="w-4 h-4 shrink-0" />}
+                    valid={signupPassword ? isPasswordValid : undefined}
+                    touched={signupTouched.password}
+                    inputBase={inputBase}
+                    suffix={
+                      <button type="button" onClick={() => setShowPassword(!showPassword)} className={`${textSub} transition-colors cursor-pointer`}>
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    }
+                  >
                     <input
                       type={showPassword ? 'text' : 'password'}
                       value={signupPassword}
@@ -601,11 +565,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                       placeholder="Min 6 characters"
                       className={`flex-1 bg-transparent text-sm focus:outline-none ${inputText}`}
                     />
-                    <button type="button" onClick={() => setShowPassword(!showPassword)} className={`${textMuted} transition-colors`}>
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                    </button>
-                  </div>
-                  {/* Strength meter */}
+                  </InputRow>
                   {signupPassword.length > 0 && (
                     <div className="mt-2 space-y-1">
                       <div className="flex gap-1 h-1">
@@ -625,21 +585,21 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                       )}
                     </div>
                   )}
-                </div>
+                </Field>
 
                 {/* Confirm Password */}
-                <div>
-                  <label className={`block text-xs font-semibold mb-1.5 uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                    Confirm Password <span className="text-rose-500">*</span>
-                  </label>
-                  <div className={`flex items-center gap-3 px-4 py-3 rounded-2xl border transition-all ${
-                    signupTouched.confirmPassword && !isConfirmPasswordValid
-                      ? 'border-rose-400 bg-rose-50/40'
-                      : signupConfirmPassword && isConfirmPasswordValid
-                      ? isDark ? 'border-emerald-600 bg-slate-900/60' : 'border-emerald-400 bg-white'
-                      : isDark ? 'bg-slate-900/60 border-slate-700 focus-within:border-[#6096ba]' : 'bg-white border-slate-200 focus-within:border-[#274c77] shadow-xs'
-                  }`}>
-                    <ShieldCheck className={`w-4 h-4 shrink-0 ${textMuted}`} />
+                <Field label="Confirm Password" required error={signupTouched.confirmPassword && !isConfirmPasswordValid ? "Passwords don't match" : ''}>
+                  <InputRow
+                    icon={<ShieldCheck className="w-4 h-4 shrink-0" />}
+                    valid={signupConfirmPassword ? isConfirmPasswordValid : undefined}
+                    touched={signupTouched.confirmPassword}
+                    inputBase={inputBase}
+                    suffix={
+                      <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className={`${textSub} transition-colors cursor-pointer`}>
+                        {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    }
+                  >
                     <input
                       type={showConfirmPassword ? 'text' : 'password'}
                       value={signupConfirmPassword}
@@ -648,14 +608,8 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                       placeholder="Re-enter password"
                       className={`flex-1 bg-transparent text-sm focus:outline-none ${inputText}`}
                     />
-                    <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className={`${textMuted} transition-colors`}>
-                      {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                    </button>
-                  </div>
-                  {signupTouched.confirmPassword && !isConfirmPasswordValid && (
-                    <p className="text-[10px] text-rose-500 mt-1 pl-1">Passwords don't match</p>
-                  )}
-                </div>
+                  </InputRow>
+                </Field>
 
                 {/* Terms */}
                 <div className="flex items-start gap-3">
@@ -664,13 +618,13 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                     id="terms"
                     checked={agreedTerms}
                     onChange={(e) => setAgreedTerms(e.target.checked)}
-                    className="w-4 h-4 mt-0.5 rounded text-[#274c77] cursor-pointer"
+                    className="w-4 h-4 mt-0.5 rounded text-[#274c77] cursor-pointer accent-[#274c77]"
                   />
-                  <label htmlFor="terms" className={`text-xs cursor-pointer leading-relaxed ${textMuted}`}>
+                  <label htmlFor="terms" className={`text-xs cursor-pointer leading-relaxed ${textSub}`}>
                     I agree to the{' '}
-                    <span className={`font-semibold underline ${isDark ? 'text-blue-400' : 'text-[#274c77]'}`}>Terms of Service</span>
+                    <span className="font-semibold underline text-[#274c77]">Terms of Service</span>
                     {' '}and{' '}
-                    <span className={`font-semibold underline ${isDark ? 'text-blue-400' : 'text-[#274c77]'}`}>Privacy Policy</span>.
+                    <span className="font-semibold underline text-[#274c77]">Privacy Policy</span>.
                   </label>
                 </div>
 
@@ -678,26 +632,19 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#274c77] hover:bg-[#1e3b5e] active:bg-[#14263e] text-white text-sm font-semibold rounded-2xl shadow-lg shadow-[#274c77]/25 hover:shadow-xl hover:shadow-[#274c77]/30 transition-all duration-200 cursor-pointer disabled:opacity-60 transform hover:scale-[1.01] active:scale-[0.99]"
+                  className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#274c77] hover:bg-[#1e3b5e] active:bg-[#14263e] text-white text-sm font-semibold rounded-2xl shadow-lg shadow-[#274c77]/25 hover:shadow-xl hover:shadow-[#274c77]/30 transition-all duration-200 cursor-pointer disabled:opacity-60 hover:scale-[1.01] active:scale-[0.99]"
                 >
                   {isLoading ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      <span>Creating workspace…</span>
-                    </>
+                    <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /><span>Creating workspace…</span></>
                   ) : (
-                    <>
-                      <span>Create SaaS Account</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
+                    <><span>Create SaaS Account</span><ArrowRight className="w-4 h-4" /></>
                   )}
                 </button>
               </form>
 
-              {/* Switch to login */}
-              <p className={`text-center mt-6 text-xs ${textMuted}`}>
+              <p className={`text-center mt-5 text-xs ${textSub}`}>
                 Already have an account?{' '}
-                <button type="button" onClick={() => switchMode('login')} className="text-[#274c77] font-semibold hover:underline cursor-pointer dark:text-[#6096ba]">
+                <button type="button" onClick={() => switchMode('login')} className="text-[#274c77] font-semibold hover:underline cursor-pointer">
                   Sign in
                 </button>
               </p>
@@ -706,10 +653,50 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
         </div>
 
         {/* Right panel footer */}
-        <div className={`px-8 py-4 text-center text-[10px] shrink-0 ${textMuted}`}>
+        <div className={`px-8 py-4 text-center text-[10px] shrink-0 ${textSub}`}>
           Fast · Reliable · Branded Booking Engine
         </div>
       </div>
+    </div>
+  );
+};
+
+/* ─── Small reusable sub-components ─── */
+
+const Field: React.FC<{ label: string; required?: boolean; error?: string | false; children: React.ReactNode }> = ({
+  label, required, error, children,
+}) => (
+  <div>
+    <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider text-slate-500">
+      {label} {required && <span className="text-rose-500">*</span>}
+    </label>
+    {children}
+    {error && <p className="text-[10px] text-rose-500 mt-1 pl-1">{error}</p>}
+  </div>
+);
+
+const InputRow: React.FC<{
+  icon: React.ReactNode;
+  valid?: boolean;
+  touched?: boolean;
+  inputBase: string;
+  suffix?: React.ReactNode;
+  children: React.ReactNode;
+}> = ({ icon, valid, touched, inputBase, suffix, children }) => {
+  const borderOverride =
+    touched && valid === false
+      ? 'border-rose-400 bg-rose-50/40'
+      : valid === true
+      ? 'border-emerald-400'
+      : '';
+
+  return (
+    <div className={`flex items-center gap-3 px-4 py-3 rounded-2xl border transition-all ${inputBase} ${borderOverride}`}>
+      <span className="text-slate-400">{icon}</span>
+      {children}
+      {valid === true && <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />}
+      {touched && valid === false && <AlertCircle className="w-4 h-4 text-rose-500 shrink-0" />}
+      {suffix}
     </div>
   );
 };
