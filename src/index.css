@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+/* ── Design Tokens ─────────────────────────────── */
+:root {
+  --c-light: #e7ecef;
+  --c-primary: #274c77;
+  --c-secondary: #6096ba;
+  --c-accent: #a3cef1;
+  --c-muted: #8b8c89;
+}
+
+/* ── Global Heading Weight ─────────────────────── */
+/* Overrides font-extrabold / font-bold on .font-heading elements to be lighter */
+.font-heading {
+  font-weight: 500 !important;
+  color: var(--c-primary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500 !important;
+}
+
+.font-bold, .font-extrabold {
+  font-weight: 500 !important;
+}
+
+/* ── Sidebar: Active Item Inward-Curve Effect ──── */
+:root {
+  --sidebar-bg: #274c77;
+  --main-page-bg: #e7ecef;
+}
+
+.sidebar-nav-active {
+  position: relative;
+  background-color: var(--main-page-bg);
+  border-radius: 16px 0 0 16px;
+  z-index: 10;
+}
+
+.sidebar-nav-active::before,
+.sidebar-nav-active::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+.sidebar-nav-active::before {
+  top: -16px;
+  background-image: radial-gradient(circle at 0 0, transparent 15.5px, var(--main-page-bg) 16px);
+}
+
+.sidebar-nav-active::after {
+  bottom: -16px;
+  background-image: radial-gradient(circle at 0 100%, transparent 15.5px, var(--main-page-bg) 16px);
+}
+
+/* ── Glassmorphism Utils ───────────────────────── */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 32px 0 rgba(39, 76, 119, 0.05);
+}
+
+.glass-active {
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 4px 12px rgba(39, 76, 119, 0.08);
+  border-right: 3px solid var(--c-primary);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 4px 24px -4px rgba(39, 76, 119, 0.06);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px -4px rgba(39, 76, 119, 0.12);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+
+@layer base {
+  @font-face {
+    font-family: 'Oregon';
+    src: local('Oregon'), local('Cinzel'), url('https://fonts.gstatic.com/s/cinzel/v23/8vIJ7ww63mVu7gt79Qb7.woff2') format('woff2');
+    font-weight: 500 800;
+    font-style: normal;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #0f172a;
+  }
+
+  h1, h2, h3, h4, .font-heading {
+    font-family: 'Oregon', 'Plus Jakarta Sans', sans-serif;
+    letter-spacing: -0.02em;
+  }
+}
