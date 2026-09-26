@@ -43,7 +43,6 @@ import {
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [activeBusiness, setActiveBusiness] = useState<Business | null>(null);
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [activeTab, setActiveTab] = useState<string>('overview');
@@ -130,10 +129,8 @@ export default function App() {
   // MANDATORY LOGIN GATE: Page reload requires logging in again
   if (!isAuthenticated) {
     return (
-      <div className={theme === 'dark' ? 'dark' : ''}>
+      <div>
         <AuthScreen
-          theme={theme}
-          onToggleTheme={() => setTheme(theme === 'light' ? 'dark' : 'light')}
           onSuccess={() => setIsAuthenticated(true)}
         />
       </div>
@@ -176,7 +173,7 @@ export default function App() {
   }
 
   return (
-    <div className={`h-screen w-full antialiased font-sans flex flex-col justify-center overflow-hidden transition-colors duration-300 ${theme === 'dark' ? 'dark bg-[#0b1329] text-slate-100' : 'bg-[#e7ecef] text-[#274c77]'}`}>
+    <div className="h-screen w-full antialiased font-sans flex flex-col justify-center overflow-hidden transition-colors duration-300 bg-[#e7ecef] text-[#274c77]">
       {/* Main Layout: Left Sidebar + Right Viewport */}
       <div className="flex-1 flex flex-col lg:flex-row w-full h-full relative z-10 overflow-hidden">
         {/* DESKTOP SIDEBAR */}
@@ -590,26 +587,6 @@ export default function App() {
                   </div>
                 )}
               </div>
-
-              {/* Theme Toggle Button (Beside Company Switcher) */}
-              <button
-                type="button"
-                onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-                className="px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-2xl glass-card transition-all cursor-pointer select-none border border-white/40 dark:border-slate-700 hover:bg-white/60 dark:hover:bg-slate-800 flex items-center gap-1.5 text-[#274c77] dark:text-slate-200"
-                title={theme === 'light' ? 'Switch to Dark Theme' : 'Switch to Light Theme'}
-              >
-                {theme === 'light' ? (
-                  <>
-                    <Moon className="w-4 h-4 text-[#274c77] shrink-0" />
-                    <span className="hidden sm:inline text-xs font-bold text-[#274c77]">Dark</span>
-                  </>
-                ) : (
-                  <>
-                    <Sun className="w-4 h-4 text-amber-400 shrink-0" />
-                    <span className="hidden sm:inline text-xs font-bold text-amber-400">Light</span>
-                  </>
-                )}
-              </button>
             </div>
 
             {/* Right: Actions, Notifications, User Profile */}
@@ -657,7 +634,7 @@ export default function App() {
                   />
                 </div>
                 <div className="hidden md:block text-left">
-                  <span className="text-xs font-bold text-[#274c77] dark:text-white block leading-tight">
+                  <span className="text-xs font-bold text-[#274c77] block leading-tight">
                     Aayan Qureshi
                   </span>
                   <span className="text-[10px] text-[#6096ba] block leading-tight">

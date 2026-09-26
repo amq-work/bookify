@@ -10,20 +10,19 @@ import {
   ShieldCheck,
   Sun,
   Moon,
+  ArrowRight,
+  User,
+  Building2
 } from 'lucide-react';
 
 interface AuthScreenProps {
   initialMode?: 'login' | 'signup';
   onSuccess?: (userData: { email: string; name?: string; businessName?: string }) => void;
-  theme?: 'light' | 'dark';
-  onToggleTheme?: () => void;
 }
 
 export const AuthScreen: React.FC<AuthScreenProps> = ({
   initialMode = 'login',
   onSuccess,
-  theme = 'light',
-  onToggleTheme,
 }) => {
   const [mode, setMode] = useState<'login' | 'signup'>(initialMode);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -63,8 +62,8 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
   };
 
   const handleFillDemoCredentials = () => {
-    setLoginEmail('aqureshi.1020@gmail.com');
-    setLoginPassword('password123');
+    setLoginEmail('test@gmail.com');
+    setLoginPassword('test123');
     setLoginError('');
   };
 
@@ -111,7 +110,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
     }, 1200);
   };
 
-  const isDark = theme === 'dark';
+  const isDark = false;
   // Colour tokens
   const rpBg       = isDark ? '#111c35' : '#f8fafc';    // right-panel background
   const textMain   = isDark ? 'text-white' : 'text-[#274c77]';
@@ -140,41 +139,60 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
         className="relative hidden md:flex flex-col justify-between overflow-visible shrink-0 transition-all duration-500"
         style={{
           width: '36%',
-          background: 'linear-gradient(160deg, #274c77 0%, #1e3b5e 55%, #14263e 100%)',
+          background: 'linear-gradient(155deg, #1b365d 0%, #142847 50%, #0d1a2d 100%)',
         }}
       >
-        {/* Decorative blobs */}
-        <div className="absolute top-0 left-0 w-72 h-72 bg-[#6096ba]/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-        <div className="absolute bottom-0 right-0 w-80 h-80 bg-[#a3cef1]/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2 pointer-events-none" />
+        {/* Glow & grid atmosphere */}
+        <div className="absolute top-0 left-0 w-96 h-96 bg-[#6096ba]/25 rounded-full blur-[100px] -translate-x-1/3 -translate-y-1/3 pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-80 h-80 bg-[#a3cef1]/15 rounded-full blur-[90px] translate-x-1/3 translate-y-1/3 pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#3b82f6]/10 rounded-full blur-3xl pointer-events-none" />
 
-        {/* Subtle diagonal stripe texture */}
+        {/* Dynamic mesh dot overlay */}
         <div
-          className="absolute inset-0 pointer-events-none opacity-[0.04]"
+          className="absolute inset-0 pointer-events-none opacity-[0.05]"
           style={{
-            backgroundImage: `repeating-linear-gradient(45deg, rgba(255,255,255,1) 0px, rgba(255,255,255,1) 1px, transparent 1px, transparent 36px)`,
+            backgroundImage: `radial-gradient(circle at 50% 50%, rgba(255,255,255,0.8) 1px, transparent 1px)`,
+            backgroundSize: '24px 24px',
           }}
         />
 
         {/* ── Brand header ── */}
-        <div className="relative z-10 px-10 pt-10">
-          <div className="flex items-center gap-3 mb-14">
-            <div className="relative w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/30 shadow-lg shrink-0">
-              <div className="w-7 h-7 rounded-full border-2 border-white/90 flex items-center justify-center">
-                <div className="w-3.5 h-3.5 rounded-full bg-white/30 flex items-center justify-center">
-                  <div className="w-1.5 h-1.5 rounded-full bg-white" />
+        <div className="relative z-10 px-10 pt-12">
+          {/* Logo */}
+          <div className="flex items-center gap-3.5 mb-14">
+            <div className="relative w-11 h-11 rounded-2xl bg-white flex items-center justify-center shadow-[0_0_25px_rgba(255,255,255,0.3)] shrink-0 transition-transform duration-300 hover:scale-105">
+              <div className="w-7 h-7 rounded-xl border-2 border-[#1b365d] flex items-center justify-center">
+                <div className="w-3.5 h-3.5 rounded-lg bg-[#1b365d] flex items-center justify-center">
+                  <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                 </div>
               </div>
             </div>
-            <span className="text-2xl text-white font-heading tracking-wide">Bookify</span>
+            <div className="flex flex-col">
+              <span className="text-2xl text-white tracking-tight leading-none" style={{ fontWeight: 700 }}>
+                Bookify
+              </span>
+              <span className="text-[10px] text-[#a3cef1] tracking-wider uppercase mt-1 font-semibold opacity-90">
+                SaaS Booking Engine
+              </span>
+            </div>
           </div>
 
-          <h1 className="text-[2.4rem] leading-[1.15] text-white mb-3">
+          {/* Headline */}
+          <h1 className="mt-20 text-[3.2rem] leading-[1.04] text-white mb-5 tracking-tighter" style={{ fontWeight: 800 }}>
             Scheduling<br />
-            <span className="text-[#a3cef1]">reimagined.</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a3cef1] via-[#dbeafe] to-[#ffffff] drop-shadow-sm">
+              reimagined.
+            </span>
           </h1>
-          <p className="text-sm text-white/55 leading-relaxed max-w-xs">
+
+
+
+          {/* Description */}
+          <p className="text-[14.5px] text-white/80 leading-relaxed max-w-[310px] font-normal tracking-wide">
             Your all-in-one SaaS booking platform. Manage appointments, services and clients — all in one place.
           </p>
+
+
         </div>
 
         {/* ════════════════════════════════════════════
@@ -184,42 +202,42 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
             so ::before/::after concave curves work.
             No icons, no arrows — pure text only.
             ════════════════════════════════════════════ */}
-        <div className="relative z-10 flex flex-col items-end gap-2 mb-20">
+        <div className="relative z-10 flex flex-col items-end gap-2 mb-16">
 
-          {/* ── Sign In Tab ── */}
+          {/* ── Login Tab ── */}
           <button
             type="button"
             onClick={() => switchMode('login')}
             className={[
-              'relative cursor-pointer transition-all duration-300 ease-in-out',
+              'relative cursor-pointer transition-all duration-300 ease-in-out w-32 text-right pl-4 pr-9 py-4 text-sm',
               mode === 'login'
-                ? `${tabActiveCls(true)} px-9 py-4 text-sm font-semibold tracking-wide ${textMain}`
-                : 'px-9 py-4 text-sm font-medium text-white/55 hover:text-white/85',
+                ? `${tabActiveCls(true)} font-semibold tracking-wide ${textMain}`
+                : 'font-medium text-white/55 hover:text-white/85',
             ].join(' ')}
             style={mode === 'login' ? { backgroundColor: rpBg } : {}}
           >
-            Sign In
+            Login
           </button>
 
-          {/* ── Create Account Tab ── */}
+          {/* ── Signup Tab ── */}
           <button
             type="button"
             onClick={() => switchMode('signup')}
             className={[
-              'relative cursor-pointer transition-all duration-300 ease-in-out',
+              'relative cursor-pointer transition-all duration-300 ease-in-out w-32 text-right pl-4 pr-9 py-4 text-sm',
               mode === 'signup'
-                ? `${tabActiveCls(true)} px-9 py-4 text-sm font-semibold tracking-wide ${textMain}`
-                : 'px-9 py-4 text-sm font-medium text-white/55 hover:text-white/85',
+                ? `${tabActiveCls(true)} font-semibold tracking-wide ${textMain}`
+                : 'font-medium text-white/55 hover:text-white/85',
             ].join(' ')}
             style={mode === 'signup' ? { backgroundColor: rpBg } : {}}
           >
-            Create Account
+            Signup
           </button>
 
         </div>
 
         {/* Footer */}
-        <div className="relative z-10 px-10 pb-8 text-[10px] text-white/25">
+        <div className="relative z-10 px-10 pb-8 text-[11px] text-white/35 font-medium tracking-wide">
           © 2026 Bookify Inc. · Multi-tenant SaaS Platform
         </div>
       </div>
@@ -244,21 +262,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
           </div>
           <div className="hidden md:block" />
 
-          {/* Theme toggle */}
-          {onToggleTheme && (
-            <button
-              type="button"
-              onClick={onToggleTheme}
-              className={`p-2 rounded-xl flex items-center gap-2 text-xs font-semibold cursor-pointer transition-all border ${
-                isDark
-                  ? 'bg-slate-800 text-amber-400 border-slate-700 hover:bg-slate-700'
-                  : 'bg-white text-[#274c77] border-slate-200 hover:bg-slate-50 shadow-xs'
-              }`}
-            >
-              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-              <span className="hidden sm:inline">{isDark ? 'Light' : 'Dark'}</span>
-            </button>
-          )}
+          {/* Theme toggle removed */}
         </div>
 
         {/* Mobile tab switcher */}
@@ -272,7 +276,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                   mode === m ? 'bg-[#274c77] text-white shadow-sm' : textSub
                 }`}
               >
-                {m === 'login' ? 'Sign In' : 'Create Account'}
+                {m === 'login' ? 'Login' : 'Signup'}
               </button>
             ))}
           </div>
@@ -318,7 +322,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                 <div className="flex items-center gap-2">
                   <Key className="w-4 h-4 text-amber-500 shrink-0" />
                   <span className={`text-[11px] font-mono ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                    <span className="font-semibold">aqureshi.1020@gmail.com</span> / password123
+                    <span className="font-semibold">test@gmail.com</span> / test123
                   </span>
                 </div>
                 <button
@@ -353,7 +357,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                       type="email"
                       value={loginEmail}
                       onChange={(e) => setLoginEmail(e.target.value)}
-                      placeholder="aqureshi.1020@gmail.com"
+                      placeholder="test@gmail.com"
                       className={`flex-1 bg-transparent text-sm focus:outline-none ${inputText}`}
                     />
                   </div>
@@ -493,7 +497,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
                       value={signupEmail}
                       onBlur={() => setSignupTouched((p) => ({ ...p, email: true }))}
                       onChange={(e) => setSignupEmail(e.target.value)}
-                      placeholder="aqureshi.1020@gmail.com"
+                      placeholder="test@gmail.com"
                       className={`flex-1 bg-transparent text-sm focus:outline-none ${inputText}`}
                     />
                   </InputRow>

@@ -165,6 +165,30 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1.5">
             <label className="block font-semibold text-[#274c77] uppercase tracking-wider text-[10px]">
+              Email Address
+            </label>
+            <input
+              disabled
+              placeholder="test@gmail.com"
+              className="w-full px-3.5 py-2 text-xs bg-white/40 border border-white/60 rounded-2xl text-[#274c77] cursor-not-allowed opacity-80"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="block font-semibold text-[#274c77] uppercase tracking-wider text-[10px]">
+              Phone Number
+            </label>
+            <input
+              disabled
+              placeholder="+1 (555) 000-0000"
+              className="w-full px-3.5 py-2 text-xs bg-white/40 border border-white/60 rounded-2xl text-[#274c77] cursor-not-allowed opacity-80"
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+          <div className="space-y-1.5">
+            <label className="block font-semibold text-[#274c77] uppercase tracking-wider text-[10px]">
               City
             </label>
             <input

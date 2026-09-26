@@ -97,12 +97,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 .auth-tab-active-light::before {
   top: -24px;
-  /* Quarter-circle in the top-right corner, filled with the right-panel colour */
-  background-image: radial-gradient(circle at 100% 100%, transparent 23.5px, var(--auth-rp-light) 24px);
+  /* Transparent circle at top-left to create a concave curve on the left side */
+  background-image: radial-gradient(circle at 0 0, transparent 23.5px, var(--auth-rp-light) 24px);
 }
 .auth-tab-active-light::after {
   bottom: -24px;
-  background-image: radial-gradient(circle at 100% 0%, transparent 23.5px, var(--auth-rp-light) 24px);
+  /* Transparent circle at bottom-left */
+  background-image: radial-gradient(circle at 0 100%, transparent 23.5px, var(--auth-rp-light) 24px);
 }
 
 /* ── dark mode curves ── */
@@ -111,11 +112,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 .auth-tab-active-dark::before {
   top: -24px;
-  background-image: radial-gradient(circle at 100% 100%, transparent 23.5px, var(--auth-rp-dark) 24px);
+  background-image: radial-gradient(circle at 0 0, transparent 23.5px, var(--auth-rp-dark) 24px);
 }
 .auth-tab-active-dark::after {
   bottom: -24px;
-  background-image: radial-gradient(circle at 100% 0%, transparent 23.5px, var(--auth-rp-dark) 24px);
+  background-image: radial-gradient(circle at 0 100%, transparent 23.5px, var(--auth-rp-dark) 24px);
 }
 
 /* ── Glassmorphism Utils ───────────────────────── */
