@@ -536,7 +536,7 @@ export default function App() {
                 </div>
 
                 {isBusinessDropdownOpen && (
-                  <div className="absolute top-full left-0 mt-3 w-64 glass-panel rounded-2xl shadow-xl border border-white/60 py-2 z-50 animate-in fade-in duration-200 slide-in-from-top-2">
+                  <div className="absolute top-full left-0 mt-3 w-64 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/60 py-2 z-50 animate-in fade-in duration-200 slide-in-from-top-2">
                     <div className="px-3.5 py-2 text-[10px] font-bold text-[#6096ba] uppercase tracking-wider">
                       Select Tenant
                     </div>
