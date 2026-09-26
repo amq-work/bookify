@@ -36,9 +36,14 @@ import {
   Menu,
   X,
   LogIn,
+  LogOut,
+  Sun,
+  Moon,
 } from 'lucide-react';
 
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [activeBusiness, setActiveBusiness] = useState<Business | null>(null);
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [activeTab, setActiveTab] = useState<string>('overview');
@@ -122,6 +127,19 @@ export default function App() {
     );
   }
 
+  // MANDATORY LOGIN GATE: Page reload requires logging in again
+  if (!isAuthenticated) {
+    return (
+      <div className={theme === 'dark' ? 'dark' : ''}>
+        <AuthScreen
+          theme={theme}
+          onToggleTheme={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+          onSuccess={() => setIsAuthenticated(true)}
+        />
+      </div>
+    );
+  }
+
   // If running through multi-step onboarding
   if (isOnboarding) {
     return (
@@ -158,7 +176,7 @@ export default function App() {
   }
 
   return (
-    <div className="h-screen w-full bg-[#e7ecef] antialiased text-[#274c77] font-sans flex flex-col justify-center overflow-hidden">
+    <div className={`h-screen w-full antialiased font-sans flex flex-col justify-center overflow-hidden transition-colors duration-300 ${theme === 'dark' ? 'dark bg-[#0b1329] text-slate-100' : 'bg-[#e7ecef] text-[#274c77]'}`}>
       {/* Main Layout: Left Sidebar + Right Viewport */}
       <div className="flex-1 flex flex-col lg:flex-row w-full h-full relative z-10 overflow-hidden">
         {/* DESKTOP SIDEBAR */}
@@ -572,6 +590,26 @@ export default function App() {
                   </div>
                 )}
               </div>
+
+              {/* Theme Toggle Button (Beside Company Switcher) */}
+              <button
+                type="button"
+                onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+                className="px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-2xl glass-card transition-all cursor-pointer select-none border border-white/40 dark:border-slate-700 hover:bg-white/60 dark:hover:bg-slate-800 flex items-center gap-1.5 text-[#274c77] dark:text-slate-200"
+                title={theme === 'light' ? 'Switch to Dark Theme' : 'Switch to Light Theme'}
+              >
+                {theme === 'light' ? (
+                  <>
+                    <Moon className="w-4 h-4 text-[#274c77] shrink-0" />
+                    <span className="hidden sm:inline text-xs font-bold text-[#274c77]">Dark</span>
+                  </>
+                ) : (
+                  <>
+                    <Sun className="w-4 h-4 text-amber-400 shrink-0" />
+                    <span className="hidden sm:inline text-xs font-bold text-amber-400">Light</span>
+                  </>
+                )}
+              </button>
             </div>
 
             {/* Right: Actions, Notifications, User Profile */}
@@ -609,16 +647,9 @@ export default function App() {
                 <HelpCircle className="w-4 h-4" />
               </button>
 
-              {/* User Profile Pill / Auth Button */}
-              <div
-                onClick={() => {
-                  setAuthMode('login');
-                  setIsAuthScreenOpen(true);
-                }}
-                className="flex items-center gap-2 pl-2 sm:pl-3 border-l border-white/40 cursor-pointer hover:opacity-90 transition-all group"
-                title="Click to view Login / Signup Screen"
-              >
-                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/40 border border-white/60 flex items-center justify-center text-[#274c77] text-xs font-bold overflow-hidden shadow-sm shrink-0 group-hover:scale-105 transition-transform">
+              {/* User Profile Pill */}
+              <div className="flex items-center gap-2 pl-2 sm:pl-3 border-l border-white/40">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/40 border border-white/60 flex items-center justify-center text-[#274c77] text-xs font-bold overflow-hidden shadow-sm shrink-0">
                   <img
                     src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
                     alt="Aayan Qureshi"
@@ -626,9 +657,8 @@ export default function App() {
                   />
                 </div>
                 <div className="hidden md:block text-left">
-                  <span className="text-xs font-bold text-[#274c77] block leading-tight flex items-center gap-1">
+                  <span className="text-xs font-bold text-[#274c77] dark:text-white block leading-tight">
                     Aayan Qureshi
-                    <LogIn className="w-3 h-3 text-[#6096ba] opacity-0 group-hover:opacity-100 transition-opacity" />
                   </span>
                   <span className="text-[10px] text-[#6096ba] block leading-tight">
                     aqureshi.1020@gmail.com
@@ -636,17 +666,15 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Explicit Sign In / Register Demo Button */}
+              {/* Sign Out Button */}
               <button
                 type="button"
-                onClick={() => {
-                  setAuthMode('login');
-                  setIsAuthScreenOpen(true);
-                }}
-                className="hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#274c77] text-white text-xs font-bold shadow-sm hover:bg-[#1d3859] transition-all cursor-pointer"
+                onClick={() => setIsAuthenticated(false)}
+                className="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 dark:text-rose-400 text-xs font-bold border border-rose-200/50 flex items-center gap-1.5 transition-all cursor-pointer"
+                title="Sign Out / Lock App"
               >
-                <LogIn className="w-3.5 h-3.5" />
-                <span>Log In / Sign Up</span>
+                <LogOut className="w-3.5 h-3.5" />
+                <span className="hidden xl:inline">Sign Out</span>
               </button>
             </div>
           </header>
@@ -752,15 +780,6 @@ export default function App() {
             </main>
           </div>
         </div>
-
-      {/* Auth Screen Modal (Login / Sign Up) */}
-      {isAuthScreenOpen && (
-        <AuthScreen
-          initialMode={authMode}
-          onClose={() => setIsAuthScreenOpen(false)}
-          onSuccess={() => setIsAuthScreenOpen(false)}
-        />
-      )}
 
       {/* Product Strategy & Methodology Documentation Modal */}
       <ProductStrategyModal
