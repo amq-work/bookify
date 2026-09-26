@@ -14,6 +14,7 @@ import { IntegrationsTab } from './components/dashboard/IntegrationsTab';
 import { SettingsTab } from './components/dashboard/SettingsTab';
 import { BrandingTab } from './components/dashboard/BrandingTab';
 import { ProductStrategyModal } from './components/docs/ProductStrategyModal';
+import { AuthScreen } from './components/auth/AuthScreen';
 import {
   LayoutGrid,
   Calendar,
@@ -34,6 +35,7 @@ import {
   PanelLeftOpen,
   Menu,
   X,
+  LogIn,
 } from 'lucide-react';
 
 export default function App() {
@@ -48,6 +50,8 @@ export default function App() {
   const [showNotificationToast, setShowNotificationToast] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isAuthScreenOpen, setIsAuthScreenOpen] = useState(false);
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
 
   // Data cache
   const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -605,9 +609,16 @@ export default function App() {
                 <HelpCircle className="w-4 h-4" />
               </button>
 
-              {/* User Profile Pill */}
-              <div className="flex items-center gap-2 pl-2 sm:pl-3 border-l border-white/40">
-                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/40 border border-white/60 flex items-center justify-center text-[#274c77] text-xs font-bold overflow-hidden shadow-sm shrink-0">
+              {/* User Profile Pill / Auth Button */}
+              <div
+                onClick={() => {
+                  setAuthMode('login');
+                  setIsAuthScreenOpen(true);
+                }}
+                className="flex items-center gap-2 pl-2 sm:pl-3 border-l border-white/40 cursor-pointer hover:opacity-90 transition-all group"
+                title="Click to view Login / Signup Screen"
+              >
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/40 border border-white/60 flex items-center justify-center text-[#274c77] text-xs font-bold overflow-hidden shadow-sm shrink-0 group-hover:scale-105 transition-transform">
                   <img
                     src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
                     alt="Aayan Qureshi"
@@ -615,14 +626,28 @@ export default function App() {
                   />
                 </div>
                 <div className="hidden md:block text-left">
-                  <span className="text-xs font-bold text-[#274c77] block leading-tight">
+                  <span className="text-xs font-bold text-[#274c77] block leading-tight flex items-center gap-1">
                     Aayan Qureshi
+                    <LogIn className="w-3 h-3 text-[#6096ba] opacity-0 group-hover:opacity-100 transition-opacity" />
                   </span>
                   <span className="text-[10px] text-[#6096ba] block leading-tight">
                     aqureshi.1020@gmail.com
                   </span>
                 </div>
               </div>
+
+              {/* Explicit Sign In / Register Demo Button */}
+              <button
+                type="button"
+                onClick={() => {
+                  setAuthMode('login');
+                  setIsAuthScreenOpen(true);
+                }}
+                className="hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#274c77] text-white text-xs font-bold shadow-sm hover:bg-[#1d3859] transition-all cursor-pointer"
+              >
+                <LogIn className="w-3.5 h-3.5" />
+                <span>Log In / Sign Up</span>
+              </button>
             </div>
           </header>
 
@@ -727,6 +752,15 @@ export default function App() {
             </main>
           </div>
         </div>
+
+      {/* Auth Screen Modal (Login / Sign Up) */}
+      {isAuthScreenOpen && (
+        <AuthScreen
+          initialMode={authMode}
+          onClose={() => setIsAuthScreenOpen(false)}
+          onSuccess={() => setIsAuthScreenOpen(false)}
+        />
+      )}
 
       {/* Product Strategy & Methodology Documentation Modal */}
       <ProductStrategyModal
